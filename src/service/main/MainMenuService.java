@@ -18,6 +18,8 @@ public class MainMenuService {
                     new LoginService().start();
                     break;
                 case 3:
+                    new adminService().start();
+                case 4:
                     System.out.println("프로그램을 종료합니다.");
                     return;
                 default:
@@ -35,7 +37,8 @@ public class MainMenuService {
         System.out.println("----------------------");
         System.out.println("1) 회원가입 ");
         System.out.println("2) 로그인 ");
-        System.out.println("3) 종료 ");
+        System.out.println("3) 관리자 메뉴");
+        System.out.println("4) 종료 ");
         System.out.print("메뉴를 입력하세요: ");
     }
 
