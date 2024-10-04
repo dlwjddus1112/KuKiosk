@@ -23,6 +23,7 @@ public class OrderMainMenuService {
         System.out.println("3) 메뉴로 돌아가기");
         System.out.print("메뉴를 선택하세요 : ");
         System.out.print("뭘봐");
+        System.out.println("ㅋㅋ");
     }
 
 
