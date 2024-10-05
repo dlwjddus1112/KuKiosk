@@ -11,8 +11,9 @@ public class AddMenuService {
         printMenu();
         System.out.print("추가할 메뉴의 종류를 입력하세요(커피/디저트) : ");
         var menuType = sc.nextLine().trim();
-        if(!menuType.matches("^[a-zA-Z0-9가-힣 ]{1,15}$")){
+        if(!menuType.matches("^[가-힣 ]{1,5}$")){
             System.out.println("메뉴 종류가 형식에 맞지 않게 입력되었습니다. 관리자 메뉴로 돌아갑니다.");
+            new AdminService().start();
         }
         else if(!validMenuType(menuType)){
             System.out.println("메뉴 종류는 커피, 디저트입니다. 관리자 메뉴로 돌아갑니다.");
