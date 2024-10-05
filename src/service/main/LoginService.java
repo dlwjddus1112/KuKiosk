@@ -1,19 +1,24 @@
 package service.main;
 
 import repository.UserRepository;
+import service.admin.AdminService;
 import service.order.OrderMainMenuService;
 
 import java.util.Scanner;
 
 public class LoginService {
     private final Scanner scanner = new Scanner(System.in);
-
+    private final String adminID = "admin";
+    private final String adminPWD = "1234";
     public void start() {
         printLoginMenu();
 
         String id = getLoginId();
         String password = getLoginPassword();
 
+        if(id.equals(adminID) && password.equals(adminPWD)) {
+            new AdminService().start();
+        }
         var user = UserRepository.getInstance().findUserByLoginId(id);
 
         if (user == null) {
