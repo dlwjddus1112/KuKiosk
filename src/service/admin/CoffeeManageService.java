@@ -43,8 +43,13 @@ public class CoffeeManageService {
         validateQuantity(selectedCoffee, quantity);
         String CoffeeName = selectedCoffee.getProductName();
 
+        if(quantity > 0){
+            System.out.print(menu + "번 메뉴 (" + CoffeeName + ")의 개수를 " + quantity + "개 증가하시겠습니까? (y/n) ");
+        }
+        else{
+            System.out.print(menu + "번 메뉴 (" + CoffeeName + ")의 개수를 " + (quantity * -1) + "개 감소하시겠습니까? (y/n) ");
 
-        System.out.print(menu + "번 메뉴 (" + CoffeeName + ")의 개수를 " + quantity + "개 증가하시겠습니까? (y/n) ");
+        }
         String answer = sc.nextLine().trim();
         if(answer.equals("y")){
             ProductRepository.getInstance().addProductQuantity(CoffeeName, quantity);
@@ -84,8 +89,8 @@ public class CoffeeManageService {
             new AdminService().start();
         }
         int menu = Integer.parseInt(menuInput);
-        if(menu > coffees.size() + 1 || menu < 0){
-            System.out.println("메뉴는 1에서 " + (coffees.size() + 1) + "로 입력해주세요.");
+        if(menu > coffees.size() || menu < 0){
+            System.out.println("메뉴는 1에서 " + (coffees.size() + 1) + "사이로 입력해주세요.");
             new AdminService().start();
         }
     }
