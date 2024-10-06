@@ -12,7 +12,7 @@ public class Payment {
         System.out.println("현재 선택된 상품:");
         for (int i = 0; i < selectedProducts.size(); i++) {
             Product product = selectedProducts.get(i);
-            System.out.println((i + 1) + ". " + product.getProductName());
+            System.out.println((i + 1) + ". " + product.getProductName()+"("+product.getPrice()+"원)");
         }
         System.out.print("결제 하시겠습니까? (y/n): ");
         String input = scanner.nextLine().trim().toLowerCase(); // 입력을 소문자로 변

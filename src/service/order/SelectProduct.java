@@ -26,7 +26,7 @@ public class SelectProduct {
     }
     private void printMenu(){
         System.out.println("----------------------");
-        System.out.println("상품 선택      ");
+        System.out.println("       상품 선택       ");
         System.out.println("----------------------");
         System.out.println("0. 상품 선택 화면 나가기");
         System.out.println("1. 커피");

@@ -29,11 +29,11 @@ public class DesertSelect {
                 return;
             }
             else if(choice <= deserts.size()){
-                Product selectedCoffee = deserts.get(choice - 1);
-                if (selectedCoffee.getCurrentQuantity() > 0) { // 재고가 있는 경우
-                    selectedProducts.add(selectedCoffee); // 선택한 커피 추가
-                    selectedCoffee.setCurrentQuantity(selectedCoffee.getCurrentQuantity() - 1); // 재고 감소
-                    System.out.println(selectedCoffee.getProductName() + "가 추가되었습니다.");
+                Product selectedDesert = deserts.get(choice - 1);
+                if (selectedDesert.getCurrentQuantity() > 0) { // 재고가 있는 경우
+                    selectedProducts.add(selectedDesert); // 선택한 커피 추가
+                    selectedDesert.setCurrentQuantity(selectedDesert.getCurrentQuantity() - 1); // 재고 감소
+                    System.out.println(selectedDesert.getProductName() + "가 추가되었습니다.");
                 } else {
                     System.out.println("[Sold Out] 이 상품은 더 이상 구매할 수 없습니다.");
                 }
@@ -42,13 +42,15 @@ public class DesertSelect {
     }
 
     private void displayDeserts(List<Product> deserts) {
+        System.out.println("----------------------");
+        System.out.println("메뉴를 선택해주세요.");
 
         System.out.println("0. 상품선택 화면 나가기");
 
         for(int i = 0 ; i< deserts.size(); i++){
-            Product coffee = deserts.get(i);
-            System.out.println((i+1) + ". " + coffee.getProductName());
-            if(coffee.getCurrentQuantity() == 0){
+            Product desert = deserts.get(i);
+            System.out.println((i+1) + ". " + desert.getProductName()+"("+desert.getPrice()+"원)");
+            if(desert.getCurrentQuantity() == 0){
                 System.out.print("[Sold Out]");
                 System.out.println();
             }

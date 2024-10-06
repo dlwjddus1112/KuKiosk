@@ -41,17 +41,20 @@ public class CoffeeSelect {
     }
 
     private void displayCoffees(List<Product> coffees) {
+        System.out.println("----------------------");
+        System.out.println("메뉴를 선택해주세요.");
 
         System.out.println("0. 상품선택 화면 나가기");
 
         for(int i = 0 ; i< coffees.size(); i++){
             Product coffee = coffees.get(i);
-            System.out.println((i+1) + ". " + coffee.getProductName());
+            System.out.println((i+1) + ". " + coffee.getProductName()+"("+coffee.getPrice()+"원)");
             if(coffee.getCurrentQuantity() == 0){
                 System.out.print("[Sold Out]");
                 System.out.println();
             }
         }
+
     }
 
     private int getUserInput() {
