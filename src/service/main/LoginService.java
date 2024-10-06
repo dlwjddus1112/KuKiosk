@@ -1,9 +1,11 @@
 package service.main;
 
+import entity.Product;
 import repository.UserRepository;
 import service.admin.AdminService;
 import service.order.OrderMainMenuService;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LoginService {
@@ -35,7 +37,7 @@ public class LoginService {
             return;
         }
         System.out.println("로그인 성공");
-        new OrderMainMenuService().start();
+        new OrderMainMenuService(new ArrayList<Product>()).start();
     }
 
     private void printLoginMenu() {
