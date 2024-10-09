@@ -39,16 +39,16 @@ public class DessertManageService {
             new AdminService().start();
         }
         int quantity = Integer.parseInt(quantityInput);
-        Product selectedCoffee = desserts.get(menu - 1);
-        validateQuantity(selectedCoffee, quantity);
-        String CoffeeName = selectedCoffee.getProductName();
+        Product selectedDessert = desserts.get(menu - 1);
+        validateQuantity(selectedDessert, quantity);
+        String DessertName = selectedDessert.getProductName();
 
 
-        System.out.print(menu + "번 메뉴 (" + CoffeeName + ")의 개수를 " + quantity + "개 증가하시겠습니까? (y/n) ");
+        System.out.print(menu + "번 메뉴 (" + DessertName + ")의 개수를 " + quantity + "개 증가하시겠습니까? (y/n) ");
         String answer = sc.nextLine().trim();
         if(answer.equals("y")){
-            ProductRepository.getInstance().addProductQuantity(CoffeeName, quantity);
-            System.out.println(menu + "번 메뉴 (" + CoffeeName + ")의 개수 : (" + selectedCoffee.getCurrentQuantity() + " / " + selectedCoffee.getMaxQuantity() + ")");
+            ProductRepository.getInstance().addProductQuantity(DessertName, quantity);
+            System.out.println(menu + "번 메뉴 (" + DessertName + ")의 개수 : (" + selectedDessert.getCurrentQuantity() + " / " + selectedDessert.getMaxQuantity() + ")");
             new AdminService().start();
         }
         else if(answer.equals("n")){
@@ -65,18 +65,18 @@ public class DessertManageService {
 
     }
 
-    private void validateQuantity(Product selectedCoffee, int quantity) {
-        if(selectedCoffee.getCurrentQuantity() + quantity > selectedCoffee.getMaxQuantity()){
-            System.out.println(selectedCoffee.getProductName() +"의 제한 수량은 " + selectedCoffee.getMaxQuantity() + "개 입니다.");
+    private void validateQuantity(Product selectedDessert, int quantity) {
+        if(selectedDessert.getCurrentQuantity() + quantity > selectedDessert.getMaxQuantity()){
+            System.out.println(selectedDessert.getProductName() +"의 제한 수량은 " + selectedDessert.getMaxQuantity() + "개 입니다.");
             new AdminService().start();
         }
-        if(selectedCoffee.getCurrentQuantity() + quantity < 0){
+        if(selectedDessert.getCurrentQuantity() + quantity < 0){
             System.out.println("메뉴의 수량은 0개 미만일 수 없습니다.");
             new AdminService().start();
         }
     }
 
-    private void validateInput(String menuInput, List<Product> coffees) {
+    private void validateInput(String menuInput, List<Product> desserts) {
         try{
             int menuInt = Integer.parseInt(menuInput);
         } catch (NumberFormatException e) {
@@ -84,9 +84,15 @@ public class DessertManageService {
             new AdminService().start();
         }
         int menu = Integer.parseInt(menuInput);
-        if(menu > coffees.size() + 1 || menu < 0){
-            System.out.println("메뉴는 1에서 " + (coffees.size() + 1) + "로 입력해주세요.");
-            new AdminService().start();
+        if(menu > desserts.size()  || menu < 0){
+            if(desserts.size() == 1){
+                System.out.println("1번 메뉴만 선택 가능합니다.");
+                new AdminService().start();
+            }
+            else{
+                System.out.println("메뉴는 1에서 " + desserts.size() + "사이로 입력해주세요.");
+                new AdminService().start();
+            }
         }
     }
 
