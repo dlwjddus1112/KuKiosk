@@ -4,7 +4,7 @@ import java.util.Scanner;
 import entity.Product;
 import java.util.ArrayList;
 import java.util.List;
-public class SelectProduct {
+public class SelectProductService {
     Scanner scanner = new Scanner(System.in);
     List<Product> selectedProducts = new ArrayList<>();
 
@@ -16,10 +16,10 @@ public class SelectProduct {
                 new OrderMainMenuService(selectedProducts).start();
                 break;
             case 1:
-                new CoffeeSelect().start(selectedProducts);
+                new CoffeeSelectService().start(selectedProducts);
                 break;
             case 2:
-                new DesertSelect().start(selectedProducts);
+                new DesertSelectService().start(selectedProducts);
                 break;
 
         }

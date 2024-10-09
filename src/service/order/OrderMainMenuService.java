@@ -4,7 +4,6 @@ import entity.Product;
 import service.main.MainMenuService;
 import java.util.List;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class OrderMainMenuService {
@@ -20,11 +19,11 @@ public class OrderMainMenuService {
         int choice = getUserInput();
         switch (choice){
             case 1:
-                new SelectProduct().start(selectedProducts);
+                new SelectProductService().start(selectedProducts);
                 break;
             case 2:
                 if(!selectedProducts.isEmpty())
-                    new Payment().start(selectedProducts);
+                    new PaymentService().start(selectedProducts);
                 else{
                     System.out.println("장바구니가 비어있습니다.");
                     new OrderMainMenuService(selectedProducts).start();

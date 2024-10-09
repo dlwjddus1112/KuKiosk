@@ -6,7 +6,7 @@ import service.main.MainMenuService;
 import java.util.List;
 import java.util.Scanner;
 
-public class Payment {
+public class PaymentService {
     Scanner scanner = new Scanner(System.in);
     public void start(List<Product> selectedProducts){
         System.out.println("현재 선택된 상품:");
@@ -27,7 +27,7 @@ public class Payment {
             new MainMenuService().start();
         } else {
             System.out.println("잘못된 입력입니다. 'y' 또는 'n'을 입력하세요.");
-            new Payment().start(selectedProducts);
+            new PaymentService().start(selectedProducts);
         }
 
 

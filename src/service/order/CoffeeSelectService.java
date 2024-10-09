@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class CoffeeSelect {
+public class CoffeeSelectService {
     Scanner scanner = new Scanner(System.in);
 
     public void start(List<Product> selectedProducts){
@@ -24,7 +24,7 @@ public class CoffeeSelect {
             displayCoffees(coffees);
             int choice = getUserInput();
             if(choice == 0){
-                new SelectProduct().start(selectedProducts);
+                new SelectProductService().start(selectedProducts);
                 return;
             }
             else if(choice <= coffees.size()){
