@@ -92,7 +92,7 @@ public class DessertManageService {
 
     private void printMenu(){
         System.out.println("----------------------");
-        System.out.println("      커피 재고 관리    ");
+        System.out.println("      디저트 재고 관리    ");
         System.out.println("----------------------");
     }
 }

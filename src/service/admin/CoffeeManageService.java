@@ -90,8 +90,15 @@ public class CoffeeManageService {
         }
         int menu = Integer.parseInt(menuInput);
         if(menu > coffees.size() || menu < 0){
-            System.out.println("메뉴는 1에서 " + (coffees.size() + 1) + "사이로 입력해주세요.");
-            new AdminService().start();
+            if(coffees.size() == 1){
+                System.out.println("1번 메뉴만 선택 가능합니다.");
+                new AdminService().start();
+            }
+            else{
+                System.out.println("메뉴는 1에서 " + coffees.size() + "사이로 입력해주세요.");
+                new AdminService().start();
+            }
+
         }
     }
 
