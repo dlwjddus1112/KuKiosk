@@ -19,7 +19,7 @@ public class MainMenuService {
                     break;
                 case 3:
                     System.out.println("프로그램을 종료합니다.");
-                    return;
+                    System.exit(0);
                 default:
                     System.out.println("1~3 사이의 값만 입력해주세요.");
                     System.out.println("엔터키를 누르면 메인메뉴로 돌아갑니다.");

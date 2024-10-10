@@ -21,6 +21,11 @@ public class SelectProductService {
             case 2:
                 new DesertSelectService().start(selectedProducts);
                 break;
+            default:
+                System.out.println("0~2 사이의 값만 입력해주세요");
+                this.start(selectedProducts);
+                break;
+
 
         }
     }

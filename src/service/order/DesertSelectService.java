@@ -23,13 +23,15 @@ public class DesertSelectService {
 
         while(true) {
             displayDeserts(deserts);
-            int choice = getUserInput();
-            if(choice == 0){
+            var menuInput = scanner.nextLine().trim();
+            validateInput(menuInput,deserts);
+            int menu = Integer.parseInt(menuInput);
+            if(menu == 0){
                 new SelectProductService().start(selectedProducts);
                 return;
             }
-            else if(choice <= deserts.size()){
-                Product selectedDesert = deserts.get(choice - 1);
+            else if(menu <= deserts.size()){
+                Product selectedDesert = deserts.get(menu - 1);
                 if (selectedDesert.getCurrentQuantity() > 0) { // 재고가 있는 경우
                     selectedProducts.add(selectedDesert); // 선택한 커피 추가
                     selectedDesert.setCurrentQuantity(selectedDesert.getCurrentQuantity() - 1); // 재고 감소
@@ -43,7 +45,7 @@ public class DesertSelectService {
 
     private void displayDeserts(List<Product> deserts) {
         System.out.println("----------------------");
-        System.out.println("메뉴를 선택해주세요.");
+
 
         System.out.println("0. 상품선택 화면 나가기");
 
@@ -55,13 +57,27 @@ public class DesertSelectService {
                 System.out.println();
             }
         }
+        System.out.print("메뉴를 선택해주세요 : ");
     }
 
-    private int getUserInput() {
-        try {
-            return Integer.parseInt(scanner.nextLine().trim());
+    private void validateInput(String menuInput, List<Product> coffees) {
+        try{
+            int menuInt = Integer.parseInt(menuInput);
         } catch (NumberFormatException e) {
-            return -1;
+            System.out.println("숫자 형식으로 입력해주세요. ");
+            new SelectProductService().start(coffees);
+        }
+        int menu = Integer.parseInt(menuInput);
+        if(menu > coffees.size() || menu < 0){
+            if(coffees.size() == 1){
+                System.out.println("1번 메뉴만 선택 가능합니다.");
+                new SelectProductService().start(coffees);
+            }
+            else{
+                System.out.println("메뉴는 1에서 " + coffees.size() + "사이로 입력해주세요.");
+                new SelectProductService().start(coffees);
+            }
+
         }
     }
 }

@@ -32,6 +32,10 @@ public class OrderMainMenuService {
             case 3:
                 new MainMenuService().start();
                 break;
+            default:
+                System.out.println("1~3 사이의 값만 입력해주세요");
+                this.start();
+                break;
         }
     }
 
