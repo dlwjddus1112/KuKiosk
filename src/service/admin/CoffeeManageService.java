@@ -18,6 +18,10 @@ public class CoffeeManageService {
                 coffees.add(product);
             }
         }
+        if(coffees.isEmpty()){
+            System.out.println("메뉴에 커피가 존재하지 않습니다.");
+            new AdminService().start();
+        }
         for(int i = 0 ; i< coffees.size(); i++){
             Product coffee = coffees.get(i);
             System.out.println((i+1) + "." + coffee.getProductName() + "(" + coffee.getCurrentQuantity() + " /" + coffee.getMaxQuantity() + ")");
@@ -89,7 +93,7 @@ public class CoffeeManageService {
             new AdminService().start();
         }
         int menu = Integer.parseInt(menuInput);
-        if(menu > coffees.size() || menu < 0){
+        if(menu > coffees.size() || menu <= 0){
             if(coffees.size() == 1){
                 System.out.println("1번 메뉴만 선택 가능합니다.");
                 new AdminService().start();

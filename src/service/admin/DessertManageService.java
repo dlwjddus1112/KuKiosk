@@ -26,6 +26,10 @@ public class DessertManageService {
                 System.out.println();
             }
         }
+        if(desserts.isEmpty()){
+            System.out.println("메뉴에 디저트가 존재하지 않습니다.");
+            new AdminService().start();
+        }
         System.out.print("수량 조절할 메뉴를 선택해주세요(번호로 입력) : ");
         var menuInput = sc.nextLine().trim();
         validateInput(menuInput, desserts);
@@ -43,8 +47,13 @@ public class DessertManageService {
         validateQuantity(selectedDessert, quantity);
         String DessertName = selectedDessert.getProductName();
 
+        if(quantity > 0){
+            System.out.print(menu + "번 메뉴 (" + DessertName + ")의 개수를 " + quantity + "개 증가하시겠습니까? (y/n) ");
+        }
+        else{
+            System.out.print(menu + "번 메뉴 (" + DessertName + ")의 개수를 " + (quantity * -1) + "개 감소하시겠습니까? (y/n) ");
 
-        System.out.print(menu + "번 메뉴 (" + DessertName + ")의 개수를 " + quantity + "개 증가하시겠습니까? (y/n) ");
+        }
         String answer = sc.nextLine().trim();
         if(answer.equals("y")){
             ProductRepository.getInstance().addProductQuantity(DessertName, quantity);
@@ -84,7 +93,7 @@ public class DessertManageService {
             new AdminService().start();
         }
         int menu = Integer.parseInt(menuInput);
-        if(menu > desserts.size()  || menu < 0){
+        if(menu > desserts.size()  || menu <= 0){
             if(desserts.size() == 1){
                 System.out.println("1번 메뉴만 선택 가능합니다.");
                 new AdminService().start();
