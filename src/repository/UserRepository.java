@@ -4,7 +4,6 @@ import entity.User;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 
 public class UserRepository {
     static UserRepository instance;

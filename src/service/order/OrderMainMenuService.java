@@ -13,7 +13,7 @@ public class OrderMainMenuService {
         this.selectedProducts = selectedProducts;
     }
 
-    Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     public void start(){
         printMenu();
         int choice = getUserInput();
