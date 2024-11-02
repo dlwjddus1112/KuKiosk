@@ -1,9 +1,12 @@
 package service.order;
 
+import entity.Ingredient;
 import entity.Product;
+import repository.IngredientRepository;
 import service.main.MainMenuService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class PaymentService {
@@ -20,8 +23,10 @@ public class PaymentService {
             int money = 0;
             for (Product product : selectedProducts) {
                 money += product.getPrice();
+                reduceIngredient(product);
             }
             System.out.println(money+"원을 결제하였습니다. 감사합니다");
+            new OrderMainMenuService(selectedProducts).start();
         }else if (input.equals("n")) {
             System.out.println("결제를 취소하였습니다. 장바구니를 비웁니다.");
             new MainMenuService().start();
@@ -31,6 +36,20 @@ public class PaymentService {
         }
 
 
+    }
+
+    private void reduceIngredient(Product product) {
+        Map<Ingredient, Integer> ingredients = product.getIngredients(); // 각 상품의 재료와 수량
+
+        IngredientRepository ingredientRepo = IngredientRepository.getInstance();
+
+        for (Map.Entry<Ingredient, Integer> entry : ingredients.entrySet()) {
+            Ingredient ingredient = entry.getKey();
+            int requiredQuantity = entry.getValue();
+
+            // 재료 수량 차감
+            ingredientRepo.addIngredientQuantity(ingredient.getIngredientName(), -requiredQuantity);
+        }
     }
 
 

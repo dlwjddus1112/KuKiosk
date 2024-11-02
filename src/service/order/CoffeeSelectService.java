@@ -1,11 +1,14 @@
 package service.order;
 
+import entity.Ingredient;
 import entity.Product;
+import repository.IngredientRepository;
 import repository.ProductRepository;
 import service.admin.AdminService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class CoffeeSelectService {
@@ -13,6 +16,7 @@ public class CoffeeSelectService {
 
     public void start(List<Product> selectedProducts){
         List<Product> products = ProductRepository.getInstance().getProducts();
+        List<Ingredient> ingredients = IngredientRepository.getInstance().getIngredients();
         List<Product> coffees= new ArrayList<>();
 
 
@@ -23,23 +27,25 @@ public class CoffeeSelectService {
         }
 
         while(true) {
-            displayCoffees(coffees);
+            displayCoffees(coffees,ingredients);
             var menuInput = scanner.nextLine().trim();
             validateInput(menuInput,coffees);
             int menu = Integer.parseInt(menuInput);
             if(menu == 0){
                 new SelectProductService().start(selectedProducts);
             }
-            else if(menu <= coffees.size()){
+            else{
                 Product selectedCoffee = coffees.get(menu - 1);
-                if (selectedCoffee.getCurrentQuantity() > 0) { // 재고가 있는 경우
-                    selectedProducts.add(selectedCoffee); // 선택한 커피 추가
-                    selectedCoffee.setCurrentQuantity(selectedCoffee.getCurrentQuantity() - 1); // 재고 감소
-                    System.out.println(selectedCoffee.getProductName() + "가 추가되었습니다.");
-                } else {
-                    System.out.println("[Sold Out] 이 상품은 더 이상 구매할 수 없습니다.");
+                if(menu <= coffees.size()){
+                    if (!isSoldOut(selectedCoffee)) { // 재고가 있는 경우
+                        selectedProducts.add(selectedCoffee); // 선택한 커피 추가
+                        System.out.println(selectedCoffee.getProductName() + "가 추가되었습니다.");
+                    } else {
+                        System.out.println("[Sold Out] 이 상품은 더 이상 구매할 수 없습니다.");
+                    }
                 }
             }
+
         }
     }
 
@@ -64,23 +70,38 @@ public class CoffeeSelectService {
         }
     }
 
-    private void displayCoffees(List<Product> coffees) {
+    private void displayCoffees(List<Product> coffees, List<Ingredient> ingredients) {
         System.out.println("----------------------");
-
-
         System.out.println("0. 상품선택 화면 나가기");
 
-        for(int i = 0 ; i< coffees.size(); i++){
+        for (int i = 0; i < coffees.size(); i++) {
             Product coffee = coffees.get(i);
-            System.out.println((i+1) + ". " + coffee.getProductName()+"("+coffee.getPrice()+"원)");
-            if(coffee.getCurrentQuantity() == 0){
-                System.out.print("[Sold Out]");
-                System.out.println();
-            }
+            boolean isSoldOut = isSoldOut(coffee);
+
+            // 품절 상태에 따라 [Sold Out] 문구를 표시
+            String soldOutText = isSoldOut ? "[Sold Out] " : "";
+            System.out.println((i + 1) + ". " + soldOutText + coffee.getProductName() + " (" + coffee.getPrice() + "원)");
         }
         System.out.print("메뉴를 선택해주세요 : ");
-
     }
+
+
+    private boolean isSoldOut(Product product) {
+        Map<Ingredient, Integer> coffeeIngredients = product.getIngredients();
+
+        for (Map.Entry<Ingredient, Integer> entry : coffeeIngredients.entrySet()) {
+            Ingredient ingredient = entry.getKey();
+            int requiredQuantity = entry.getValue();
+            int currentQuantity = IngredientRepository.getInstance().getIngredientQuantity(ingredient.getIngredientName());
+
+            // 필요한 재료의 수량보다 현재 재고가 적으면 품절로 판단
+            if (currentQuantity < requiredQuantity) {
+                return true;
+            }
+        }
+        return false; // 모든 재료의 수량이 충분하면 품절 아님
+    }
+
 
 
 }

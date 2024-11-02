@@ -1,10 +1,12 @@
 package repository;
 
+import entity.Ingredient;
 import entity.Product;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProductRepository {
     static ProductRepository instance = new ProductRepository();
@@ -35,15 +37,39 @@ public class ProductRepository {
             String line;
             while ((line = br.readLine()) != null) {
                 var data = line.split(",");
-                var product = new Product(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]),Integer.parseInt(data[4]));
+                var productType = data[0];
+                var productName = data[1];
+                int price = Integer.parseInt(data[2]);
+
+                // 새로운 Product 객체 생성
+                Product product = new Product(productType, productName, price);
+
+                // 재료 정보가 있는 경우 처리
+                if (data.length > 3) {
+                    String[] ingredientsData = data[3].split(";");
+                    for (String ingredientData : ingredientsData) {
+                        String[] ingredientInfo = ingredientData.split(":");
+                        String ingredientName = ingredientInfo[0];
+                        int quantity = Integer.parseInt(ingredientInfo[1]);
+
+                        // IngredientRepository에서 재료를 찾고 Product에 추가
+                        Ingredient ingredient = IngredientRepository.getInstance().findByIngredientName(ingredientName);
+                        if (ingredient != null) {
+                            product.getIngredients().put(ingredient,quantity);
+                        }
+                    }
+                }
+                // Product 리스트에 추가
                 products.add(product);
             }
+            br.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     private void saveProductInfos() {
         try {
@@ -63,8 +89,8 @@ public class ProductRepository {
         }
     }
 
-    public void addMenu(String productType, String productName, int price, int quantity ) {
-        Product product = new Product(productType, productName, price, quantity,quantity);
+    public void addMenu(String productType, String productName, int price, Map<Ingredient,Integer> ingredients) {
+        Product product = new Product(productType, productName, price, ingredients);
 
         products.add(product);
         saveProductInfos();
@@ -96,10 +122,6 @@ public class ProductRepository {
         return findProduct;
     }
 
-    public void addProductQuantity(String productName, int quantity) {
-        Product menu = findByMenuName(productName);
-        menu.setCurrentQuantity(menu.getCurrentQuantity() + quantity);
-        saveProductInfos();
-    }
+
 
 }

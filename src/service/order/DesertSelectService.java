@@ -1,10 +1,13 @@
 package service.order;
 
+import entity.Ingredient;
 import entity.Product;
+import repository.IngredientRepository;
 import repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class DesertSelectService {
@@ -12,6 +15,7 @@ public class DesertSelectService {
 
     public void start(List<Product> selectedProducts){
         List<Product> products = ProductRepository.getInstance().getProducts();
+        List<Ingredient> ingredients = IngredientRepository.getInstance().getIngredients();
         List<Product> deserts= new ArrayList<>();
 
 
@@ -30,12 +34,12 @@ public class DesertSelectService {
                 new SelectProductService().start(selectedProducts);
                 return;
             }
-            else if(menu <= deserts.size()){
-                Product selectedDesert = deserts.get(menu - 1);
-                if (selectedDesert.getCurrentQuantity() > 0) { // 재고가 있는 경우
-                    selectedProducts.add(selectedDesert); // 선택한 커피 추가
-                    selectedDesert.setCurrentQuantity(selectedDesert.getCurrentQuantity() - 1); // 재고 감소
-                    System.out.println(selectedDesert.getProductName() + "가 추가되었습니다.");
+            Product selectedDeserts = deserts.get(menu - 1);
+
+            if(menu <= deserts.size()){
+                if (!isSoldOut(selectedDeserts)) { // 재고가 있는 경우
+                    selectedProducts.add(selectedDeserts); // 선택한 커피 추가
+                    System.out.println(selectedDeserts.getProductName() + "가 추가되었습니다.");
                 } else {
                     System.out.println("[Sold Out] 이 상품은 더 이상 구매할 수 없습니다.");
                 }
@@ -49,35 +53,50 @@ public class DesertSelectService {
 
         System.out.println("0. 상품선택 화면 나가기");
 
-        for(int i = 0 ; i< deserts.size(); i++){
+        for (int i = 0; i < deserts.size(); i++) {
             Product desert = deserts.get(i);
-            System.out.println((i+1) + ". " + desert.getProductName()+"("+desert.getPrice()+"원)");
-            if(desert.getCurrentQuantity() == 0){
-                System.out.print("[Sold Out]");
-                System.out.println();
-            }
+            boolean isSoldOut = isSoldOut(desert);
+
+            // 품절 상태에 따라 [Sold Out] 문구를 표시
+            String soldOutText = isSoldOut ? "[Sold Out] " : "";
+            System.out.println((i + 1) + ". " + soldOutText + desert.getProductName() + " (" + desert.getPrice() + "원)");
         }
         System.out.print("메뉴를 선택해주세요 : ");
     }
 
-    private void validateInput(String menuInput, List<Product> coffees) {
+    private void validateInput(String menuInput, List<Product> deserts) {
         try{
             int menuInt = Integer.parseInt(menuInput);
         } catch (NumberFormatException e) {
             System.out.println("숫자 형식으로 입력해주세요. ");
-            new SelectProductService().start(coffees);
+            new SelectProductService().start(deserts);
         }
         int menu = Integer.parseInt(menuInput);
-        if(menu > coffees.size() || menu < 0){
-            if(coffees.size() == 1){
+        if(menu > deserts.size() || menu < 0){
+            if(deserts.size() == 1){
                 System.out.println("1번 메뉴만 선택 가능합니다.");
-                new SelectProductService().start(coffees);
+                new SelectProductService().start(deserts);
             }
             else{
-                System.out.println("메뉴는 1에서 " + coffees.size() + "사이로 입력해주세요.");
-                new SelectProductService().start(coffees);
+                System.out.println("메뉴는 1에서 " + deserts.size() + "사이로 입력해주세요.");
+                new SelectProductService().start(deserts);
             }
 
         }
+    }
+    private boolean isSoldOut(Product product) {
+        Map<Ingredient, Integer> desertIngredients = product.getIngredients();
+
+        for (Map.Entry<Ingredient, Integer> entry : desertIngredients.entrySet()) {
+            Ingredient ingredient = entry.getKey();
+            int requiredQuantity = entry.getValue();
+            int currentQuantity = IngredientRepository.getInstance().getIngredientQuantity(ingredient.getIngredientName());
+
+            // 필요한 재료의 수량보다 현재 재고가 적으면 품절로 판단
+            if (currentQuantity < requiredQuantity) {
+                return true;
+            }
+        }
+        return false; // 모든 재료의 수량이 충분하면 품절 아님
     }
 }
