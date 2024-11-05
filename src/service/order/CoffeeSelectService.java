@@ -72,6 +72,10 @@ public class CoffeeSelectService {
 
     private void displayCoffees(List<Product> coffees, List<Ingredient> ingredients) {
         System.out.println("----------------------");
+        if(coffees.isEmpty()){
+            System.out.println("커피 메뉴가 존재하지 않습니다.");
+            new SelectProductService().start(coffees);
+        }
         System.out.println("0. 상품선택 화면 나가기");
 
         for (int i = 0; i < coffees.size(); i++) {

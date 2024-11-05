@@ -49,7 +49,10 @@ public class DesertSelectService {
 
     private void displayDeserts(List<Product> deserts) {
         System.out.println("----------------------");
-
+        if(deserts.isEmpty()){
+            System.out.println("디저트 메뉴가 존재하지 않습니다.");
+            new SelectProductService().start(deserts);
+        }
 
         System.out.println("0. 상품선택 화면 나가기");
 
