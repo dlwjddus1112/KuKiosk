@@ -19,7 +19,7 @@ public class PaymentService {
             System.out.println((i + 1) + ". " + product.getProductName()+"("+product.getPrice()+"원)");
         }
         System.out.print("결제 하시겠습니까? (y/n): ");
-        String input = scanner.nextLine().trim().toLowerCase();
+        String input = scanner.nextLine().trim();
         if (input.equals("y")) {
             int money = 0;
             // 삭제할 제품들을 따로 저장
