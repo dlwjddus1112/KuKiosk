@@ -25,6 +25,10 @@ public class SignUpService {
             System.out.println("이름은 1자 이상 15자 이하로 입력해주세요.");
             return false;
         }
+        if (name.matches(".*\\s.*")) {
+            System.out.println("이름에 공백이 포함되어 있습니다.");
+            return false;
+        }
 
         if (name.matches(".*\\d.*")) {
             System.out.println("이름에 숫자가 포함되어 있습니다.");
@@ -64,6 +68,10 @@ public class SignUpService {
     }
 
     private boolean isValidPassword(String password) {
+        if (password.matches(".*\\s.*")) {
+            System.out.println("비밀번호에 공백이 포함되어 있습니다.");
+            return false;
+        }
         if (password.length() < 8 || password.length() > 16) {
             System.out.println("비밀번호는 8자 이상 16자 이하로 입력해주세요.");
             return false;
@@ -73,6 +81,8 @@ public class SignUpService {
             System.out.println("비밀번호는 숫자를 포함해야 합니다.");
             return false;
         }
+
+
 
         if (!password.matches(".*[a-z].*")) {
             System.out.println("비밀번호는 소문자를 포함해야 합니다.");
