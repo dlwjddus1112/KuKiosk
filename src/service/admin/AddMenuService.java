@@ -71,7 +71,7 @@ public class AddMenuService {
                     new AdminService().start();
                 }
                 if(menuQuantity > 5){
-                    System.out.println("한 재료가 5개 이상 들어갈 수 없습니다.");
+                    System.out.println("한 재료가 6개 이상 들어갈 수 없습니다.");
                     new AdminService().start();
                 }
                 Ingredient byIngredientName = IngredientRepository.getInstance().findByIngredientName(ingredientName);
