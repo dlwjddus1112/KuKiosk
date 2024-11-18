@@ -53,7 +53,7 @@ public class AddMenuService {
                 System.out.print("재료명을 입력해주세요 : ");
                 String ingredientName = sc.nextLine().trim();
                 if(!validIngredientName(ingredientName)){
-                    System.out.println("재료는 물, 원두, 설탕, 우유, 빵, 시럽, 생크림, 휘핑크림, 초콜릿, 얼음, 버터, 과일, 요거트 중 하나입니다.");
+                    System.out.println(ingredientName+"은 재료에 없습니다.");
                     new AdminService().start();
                 }
                 CheckDuplicateIngredient(ingredientName, ingredients);
@@ -137,15 +137,7 @@ public class AddMenuService {
 
     //물, 원두, 설탕, 우유, 빵, 시럽, 생크림, 휘핑크림, 초콜릿, 얼음, 버터, 과일, 요거트
     private boolean validIngredientName(String ingredientName) {
-        String[] ingredientNames = {"물","원두","설탕","우유","빵","시럽","생크림","휘핑크림","초콜릿","얼음","버터","과일","요거트"};
-        boolean IsvalidName = false;
-        for (String name : ingredientNames) {
-            if(name.equals(ingredientName)){
-                IsvalidName = true;
-                break;
-            }
-        }
-        return IsvalidName;
+        return IngredientRepository.getInstance().findByIngredientName(ingredientName) != null;
     }
 
 

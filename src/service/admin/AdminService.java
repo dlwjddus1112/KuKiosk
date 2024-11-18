@@ -14,14 +14,16 @@ public class AdminService {
                 new StockManageService().start();
                 break;
             case 2:
-                new AddMenuService().start();
+                new AddIngredientService().start();
                 break;
             case 3:
-                new DeleteMenuService().start();
+                new AddMenuService().start();
                 break;
             case 4:
-                new MainMenuService().start();
+                new DeleteMenuService().start();
                 break;
+            case 5:
+                new MainMenuService().start();
             default:
                 System.out.println("1~4 사이의 값만 입력해주세요.");
                 this.start();
@@ -33,9 +35,10 @@ public class AdminService {
         System.out.println("       관리자 메뉴      ");
         System.out.println("----------------------");
         System.out.println("1) 재고 관리 ");
-        System.out.println("2) 메뉴 추가");
-        System.out.println("3) 메뉴 삭제");
-        System.out.println("4) 로그아웃 ");
+        System.out.println("2) 재료 추가");
+        System.out.println("3) 메뉴 추가");
+        System.out.println("4) 메뉴 삭제");
+        System.out.println("5) 로그아웃 ");
         System.out.print("메뉴를 입력하세요: ");
     }
 
