@@ -101,4 +101,12 @@ public class IngredientRepository {
         saveIngredientInfos();
     }
 
+    public void deleteIngredient(String ingredientName){
+        Ingredient ingredient = findByIngredientName(ingredientName);
+        if(ingredient != null) {
+            ingredients.remove(ingredient);
+        }
+        saveIngredientInfos();
+    }
+
 }
