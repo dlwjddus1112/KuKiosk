@@ -19,8 +19,14 @@ public class User {
         return payAmount;
     }
 
-    public void setPayAmount(int payAmount) {
-        this.payAmount = payAmount;
+    public String getLoginId() {
+        return loginId;
+    }
+
+
+
+    public void increasePayAmount(int money) {
+        this.payAmount += money;
     }
 
     public String convertToCsvRow() {

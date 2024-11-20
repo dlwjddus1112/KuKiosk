@@ -4,8 +4,10 @@ import entity.Ingredient;
 import entity.Product;
 import entity.User;
 import repository.IngredientRepository;
+import repository.OrderRepository;
 import repository.UserRepository;
 import service.main.MainMenuService;
+import util.DateManager;
 import util.UserSession;
 
 import java.util.ArrayList;
@@ -35,8 +37,13 @@ public class PaymentService {
             selectedProducts.removeAll(productsToRemove);
             System.out.println(money+"원을 결제하였습니다. 감사합니다");
             User currentUser = UserSession.getInstance().getCurrentUser();
-            currentUser.setPayAmount(money);
-            UserRepository.getInstance().saveUserInfos();
+            currentUser.increasePayAmount(money);
+            UserRepository instance = UserRepository.getInstance();
+            instance.saveUserInfos();
+
+            String id = currentUser.getLoginId();
+            int currentDate = DateManager.getInstance().getCurrentDate();
+            OrderRepository.getInstance().addOrder(id, money, currentDate);
 
             new OrderMainMenuService(selectedProducts).start();
         }else if (input.equals("n")) {
