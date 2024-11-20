@@ -2,6 +2,8 @@ package service.order;
 
 import entity.Product;
 import service.main.MainMenuService;
+import util.UserSession;
+
 import java.util.List;
 
 import java.util.Scanner;
@@ -30,6 +32,7 @@ public class OrderMainMenuService {
                 }
                 break;
             case 3:
+                UserSession.getInstance().clearSession();
                 new MainMenuService().start();
                 break;
             default:

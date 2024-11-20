@@ -60,7 +60,7 @@ public class UserRepository {
         }
     }
 
-    private void saveUserInfos() {
+    public void saveUserInfos() {
         try {
             var file = new File("UserData.csv");
 

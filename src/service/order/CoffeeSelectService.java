@@ -5,6 +5,7 @@ import entity.Product;
 import repository.IngredientRepository;
 import repository.ProductRepository;
 import service.admin.AdminService;
+import service.main.MainMenuService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,10 @@ public class CoffeeSelectService {
     Scanner scanner = new Scanner(System.in);
 
     public void start(List<Product> selectedProducts){
+        if(ProductRepository.getInstance().getProducts().isEmpty()){
+            System.out.println("아무런 메뉴도 존재하지 않습니다. 메뉴가 등록되면 상품을 선택해주세요.");
+            new MainMenuService().start();
+        }
         List<Product> products = ProductRepository.getInstance().getProducts();
         List<Ingredient> ingredients = IngredientRepository.getInstance().getIngredients();
         List<Product> coffees= new ArrayList<>();

@@ -2,8 +2,11 @@ package service.order;
 
 import entity.Ingredient;
 import entity.Product;
+import entity.User;
 import repository.IngredientRepository;
+import repository.UserRepository;
 import service.main.MainMenuService;
+import util.UserSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,10 @@ public class PaymentService {
             }
             selectedProducts.removeAll(productsToRemove);
             System.out.println(money+"원을 결제하였습니다. 감사합니다");
+            User currentUser = UserSession.getInstance().getCurrentUser();
+            currentUser.setPayAmount(money);
+            UserRepository.getInstance().saveUserInfos();
+
             new OrderMainMenuService(selectedProducts).start();
         }else if (input.equals("n")) {
             System.out.println("결제를 취소하였습니다. 장바구니를 비웁니다.");

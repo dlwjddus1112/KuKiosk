@@ -6,6 +6,7 @@ import repository.UserRepository;
 import service.admin.AdminService;
 import service.order.OrderMainMenuService;
 import util.DateManager;
+import util.UserSession;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +42,7 @@ public class LoginService {
             return;
         }
         System.out.println("로그인 성공");
+        UserSession.getInstance().setCurrentUser(user);
         setNowDate();
         new OrderMainMenuService(new ArrayList<Product>()).start();
     }
@@ -74,7 +76,6 @@ public class LoginService {
             setNowDate();
         }
     }
-
 
     private void printLoginMenu() {
         System.out.println("<로그인>");
