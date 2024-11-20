@@ -5,14 +5,17 @@ import entity.Product;
 import repository.UserRepository;
 import service.admin.AdminService;
 import service.order.OrderMainMenuService;
+import util.DateManager;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class LoginService {
     private final Scanner scanner = new Scanner(System.in);
     private final String adminID = "admin";
     private final String adminPWD = "1234";
+
     public void start() {
         printLoginMenu();
 
@@ -38,8 +41,40 @@ public class LoginService {
             return;
         }
         System.out.println("로그인 성공");
+        setNowDate();
         new OrderMainMenuService(new ArrayList<Product>()).start();
     }
+
+    private void setNowDate() {
+        DateManager dm = DateManager.getInstance();
+        System.out.print("오늘의 날짜를 입력해주세요(YYYYMMDD 형식으로 입력) : ");
+        String dateInput = scanner.nextLine().trim();
+
+        if (dateInput.length() != 8) {
+            System.out.println("형식에 맞게 입력해주세요.");
+            setNowDate();
+            return;
+        }
+
+        try {
+            int inputDate = Integer.parseInt(dateInput);
+            int currentDate = dm.getCurrentDate();
+            if (currentDate != 0 && inputDate <= currentDate) { // 이전 날짜인지 확인
+                System.out.println("미래 날짜만 입력할 수 있습니다. 현재 가상 날짜: " + currentDate);
+                setNowDate();
+                return;
+            }
+
+            dm.setCurrentDate(inputDate);
+            dm.saveDateToFile();
+            System.out.println("날짜가 " + inputDate + "로 설정되었습니다.");
+
+        } catch (NumberFormatException e) {
+            System.out.println("숫자 형식으로 입력해주세요.");
+            setNowDate();
+        }
+    }
+
 
     private void printLoginMenu() {
         System.out.println("<로그인>");
