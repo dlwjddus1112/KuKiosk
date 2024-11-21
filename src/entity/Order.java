@@ -11,6 +11,14 @@ public class Order {
         this.date = date;
     }
 
+    public int getPayAmount() {
+        return payAmount;
+    }
+
+    public int getDate() {
+        return date;
+    }
+
     public String convertOrderRow(){
         return userId + "," + payAmount + "," + date;
     }

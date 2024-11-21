@@ -10,7 +10,7 @@ import java.util.List;
 
 public class OrderRepository {
     static OrderRepository instance = new OrderRepository();
-    List<Order> orders = new ArrayList<>();
+    public List<Order> orders = new ArrayList<>();
 
     public OrderRepository() {
         initOrderInfos();

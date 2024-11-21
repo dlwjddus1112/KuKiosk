@@ -3,7 +3,9 @@ package repository;
 import entity.User;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class UserRepository {
     static UserRepository instance;
@@ -18,6 +20,10 @@ public class UserRepository {
             instance = new UserRepository();
         }
         return instance;
+    }
+
+    public List<User> findAllUsers(){
+        return new ArrayList<>(userInfos.values());
     }
 
     public User findUserByLoginId(String loginId) {
@@ -52,6 +58,7 @@ public class UserRepository {
                 var data = line.split(",");
                 var user = new User(Integer.parseInt(data[0]), data[1], data[2], data[3]);
                 userInfos.put(user.id, user);
+
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
