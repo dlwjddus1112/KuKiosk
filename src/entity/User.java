@@ -22,6 +22,16 @@ public class User {
         this.lastCouponIssuedMonth = 0;
     }
 
+    public User(int id, String name, String loginId, String password, int payAmount, int lastCouponIssuedMonth) {
+        this.id = id;
+        this.name = name;
+        this.loginId = loginId;
+        this.password = password;
+        this.payAmount = payAmount;
+        this.coupons = new HashMap<String,Integer>();
+        this.lastCouponIssuedMonth = lastCouponIssuedMonth;
+    }
+
     public int getPayAmount() {
         return payAmount;
     }

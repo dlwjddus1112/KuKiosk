@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+//TODO : 발급된 쿠폰 정보 파일로 저장해야함.
 public class CouponService {
     private static final OrderRepository orderRepository = OrderRepository.getInstance();
     public static void giveCoupons(int currentDate, List<User> users) {
@@ -39,6 +41,7 @@ public class CouponService {
 
         for (User user : users) {
             if (user.getLastCouponIssuedMonth() == currentYYYYMM) {
+                System.out.println("이미 " + currentMonth + "월에 쿠폰을 발급받으셨습니다.");
                 continue;
             }
             User currentUser = UserSession.getInstance().getCurrentUser();

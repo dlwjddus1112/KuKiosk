@@ -56,7 +56,13 @@ public class UserRepository {
             String line;
             while ((line = br.readLine()) != null) {
                 var data = line.split(",");
-                var user = new User(Integer.parseInt(data[0]), data[1], data[2], data[3]);
+                int id = Integer.parseInt(data[0]);
+                String name = data[1];
+                String loginId = data[2];
+                String password = data[3];
+                int payAmount = Integer.parseInt(data[4]);
+                int lastCouponMonth = Integer.parseInt(data[5]);
+                var user = new User(id, name, loginId, password, payAmount, lastCouponMonth);
                 userInfos.put(user.id, user);
 
             }
