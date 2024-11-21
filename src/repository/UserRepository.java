@@ -60,11 +60,18 @@ public class UserRepository {
                 String name = data[1];
                 String loginId = data[2];
                 String password = data[3];
-                int payAmount = Integer.parseInt(data[4]);
-                int lastCouponMonth = Integer.parseInt(data[5]);
-                var user = new User(id, name, loginId, password, payAmount, lastCouponMonth);
+                int lastCouponMonth = Integer.parseInt(data[4]);
+                var user = new User(id, name, loginId, password,lastCouponMonth);
                 userInfos.put(user.id, user);
-
+                if(data.length > 5){
+                    String[] couponEntries = data[5].split(";"); // 쿠폰은 세미콜론으로 구분
+                    for (String couponEntry : couponEntries) {
+                        String[] couponParts = couponEntry.split(":");
+                        String couponName = couponParts[0];
+                        int count = Integer.parseInt(couponParts[1]);
+                        user.addCoupon(couponName, count);
+                    }
+                }
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

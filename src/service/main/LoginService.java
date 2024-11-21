@@ -65,7 +65,7 @@ public class LoginService {
 
         try {
             int inputDate = Integer.parseInt(dateInput);
-            if (currentDate != 0 && inputDate <= currentDate) { // 이전 날짜인지 확인
+            if (currentDate != 0 && inputDate < currentDate) { // 이전 날짜인지 확인
                 System.out.println("미래 날짜만 입력할 수 있습니다. 현재 가상 날짜: " + currentDate);
                 setNowDate();
                 return;

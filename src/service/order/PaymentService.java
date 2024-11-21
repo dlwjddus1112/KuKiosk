@@ -37,9 +37,6 @@ public class PaymentService {
             selectedProducts.removeAll(productsToRemove);
             System.out.println(money+"원을 결제하였습니다. 감사합니다");
             User currentUser = UserSession.getInstance().getCurrentUser();
-            currentUser.increasePayAmount(money);
-            UserRepository instance = UserRepository.getInstance();
-            instance.saveUserInfos();
 
             String id = currentUser.getLoginId();
             int currentDate = DateManager.getInstance().getCurrentDate();
