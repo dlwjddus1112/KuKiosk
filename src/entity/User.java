@@ -49,6 +49,14 @@ public class User {
         this.coupons.put(couponName,this.coupons.getOrDefault(couponName,0)+count);
     }
 
+    public void UseCoupon(String couponName){
+        int currentCount = coupons.get(couponName);
+        coupons.put(couponName,currentCount-1);
+        if (coupons.get(couponName) == 0) {
+            coupons.remove(couponName);
+        }
+    }
+
     public String convertToCsvRow() {
         StringBuilder couponData = new StringBuilder();
         for (Map.Entry<String, Integer> entry : coupons.entrySet()) {

@@ -14,11 +14,10 @@ import java.util.Map;
 public class ShowCouponService {
     List<Product> selectedProducts = new ArrayList<>();
 
-    public ShowCouponService(List<Product> selectedProducts) {
-        this.selectedProducts = selectedProducts;
+    public ShowCouponService() {
     }
 
-    public void start(){
+    public void start(List<Product> selectedProducts){
         List<Order> orders = OrderRepository.getInstance().orders;
         printMenu();
         User currentUser = UserSession.getInstance().getCurrentUser();
@@ -51,7 +50,7 @@ public class ShowCouponService {
         System.out.println("----------------------");
 
     }
-    private void showCurrentCoupons(User user) {
+    public void showCurrentCoupons(User user) {
         System.out.println("현재 보유한 쿠폰:");
         if (user.coupons.isEmpty()) {
             System.out.println("  - 보유한 쿠폰이 없습니다.");

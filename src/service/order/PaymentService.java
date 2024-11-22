@@ -10,39 +10,56 @@ import service.main.MainMenuService;
 import util.DateManager;
 import util.UserSession;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 
-//TODO : 결제할 때 쿠폰 사용할 수 있게 해야함
 public class PaymentService {
     Scanner scanner = new Scanner(System.in);
     public void start(List<Product> selectedProducts){
+        User currentUser = UserSession.getInstance().getCurrentUser();
+        UserRepository userRepository = UserRepository.getInstance();
         System.out.println("현재 선택된 상품:");
+        int totalPrice = 0;
         for (int i = 0; i < selectedProducts.size(); i++) {
             Product product = selectedProducts.get(i);
             System.out.println((i + 1) + ". " + product.getProductName()+"("+product.getPrice()+"원)");
+            totalPrice += product.getPrice();
         }
+        System.out.println("현재 장바구니 총액 : " + totalPrice);
+
+        int discountPrice = 0;
+        Map<String, Integer> coupons = currentUser.getCoupons();
+        if(coupons.isEmpty()){
+            System.out.println("보유한 쿠폰이 없습니다.");
+        }
+        else{
+            discountPrice = getDiscountPrice(selectedProducts, discountPrice, totalPrice, currentUser, userRepository);
+        }
+
+
+        if(discountPrice >= totalPrice){
+            totalPrice = 0;
+        }
+        else{
+            totalPrice = totalPrice - discountPrice;
+        }
+
+        System.out.println("결제 예정 금액 : " + totalPrice + "원");
         System.out.print("결제 하시겠습니까? (y/n): ");
         String input = scanner.nextLine().trim();
         if (input.equals("y")) {
-            int money = 0;
             // 삭제할 제품들을 따로 저장
             List<Product> productsToRemove = new ArrayList<>();
             for (Product product : selectedProducts) {
-                money += product.getPrice();
                 reduceIngredient(product);
                 productsToRemove.add(product); // 나중에 삭제하기 위해 저장
             }
             selectedProducts.removeAll(productsToRemove);
-            System.out.println(money+"원을 결제하였습니다. 감사합니다");
-            User currentUser = UserSession.getInstance().getCurrentUser();
+            System.out.println(totalPrice+"원을 결제하였습니다. 감사합니다");
 
             String id = currentUser.getLoginId();
             int currentDate = DateManager.getInstance().getCurrentDate();
-            OrderRepository.getInstance().addOrder(id, money, currentDate);
+            OrderRepository.getInstance().addOrder(id, totalPrice, currentDate);
 
             new OrderMainMenuService(selectedProducts).start();
         }else if (input.equals("n")) {
@@ -59,6 +76,58 @@ public class PaymentService {
         }
 
 
+    }
+
+    private int getDiscountPrice(List<Product> selectedProducts, int discountPrice, int totalPrice, User currentUser, UserRepository userRepository) {
+        Map<String, Integer> coupons = currentUser.getCoupons();
+        while(true){
+            System.out.print("쿠폰을 사용하시겠습니까? (y/n) ");
+            if(discountPrice >= totalPrice){
+                System.out.println("쿠폰 금액이 상품 금액보다 큽니다. 더 이상 쿠폰을 사용할 수 없습니다.");
+                break;
+            }
+            String couponInput = scanner.nextLine().trim();
+            if(couponInput.equals("y")){
+                new ShowCouponService().showCurrentCoupons(currentUser);
+                System.out.print("사용할 쿠폰의 이름을 입력하세요 : ");
+
+                String couponName = scanner.nextLine().trim();
+                if(coupons.containsKey(couponName)){
+                    switch(couponName){
+                        case "10% 할인권" :
+                            discountPrice += (int) (totalPrice * 0.1);
+                            currentUser.UseCoupon(couponName);
+                            userRepository.saveUserInfos();
+                            break;
+                        case "20% 할인권" :
+                            discountPrice += (int) (totalPrice * 0.2);
+                            currentUser.UseCoupon(couponName);
+                            userRepository.saveUserInfos();
+                            break;
+                        case "1000원 할인권" :
+                            discountPrice += 1000;
+                            currentUser.UseCoupon(couponName);
+                            userRepository.saveUserInfos();
+                            break;
+                        case "2000원 할인권" :
+                            discountPrice += 2000;
+                            currentUser.UseCoupon(couponName);
+                            userRepository.saveUserInfos();
+                            break;
+                    }
+                }
+                else{
+                    System.out.println("존재하지 않는 쿠폰입니다.");
+                }
+            }
+            else if(couponInput.equals("n")){
+                break;
+            }
+            else{
+                System.out.println("y 또는 n만 입력해주세요.");
+            }
+        }
+        return discountPrice;
     }
 
     private void reduceIngredient(Product product) {

@@ -34,7 +34,7 @@ public class OrderMainMenuService {
                 }
                 break;
             case 3:
-                new ShowCouponService(selectedProducts).start();
+                new ShowCouponService().start(selectedProducts);
                 break;
             case 4:
                 UserSession.getInstance().clearSession();

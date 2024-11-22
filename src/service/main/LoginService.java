@@ -43,7 +43,6 @@ public class LoginService {
         }
         System.out.println("로그인 성공");
         UserSession.getInstance().setCurrentUser(user);
-        int previousDate = DateManager.getInstance().getCurrentDate();
         setNowDate();
 
         new OrderMainMenuService(new ArrayList<Product>()).start();
@@ -65,7 +64,7 @@ public class LoginService {
 
         try {
             int inputDate = Integer.parseInt(dateInput);
-            if (currentDate != 0 && inputDate < currentDate) { // 이전 날짜인지 확인
+            if (currentDate != 0 && inputDate < currentDate) {
                 System.out.println("미래 날짜만 입력할 수 있습니다. 현재 가상 날짜: " + currentDate);
                 setNowDate();
                 return;
@@ -73,7 +72,7 @@ public class LoginService {
 
             dm.setCurrentDate(inputDate);
             dm.saveDateToFile();
-            checkMonthAndDay(currentDate,inputDate);
+            checkMonthAndDay(currentDate,inputDate); // currentDate : 20240101, inputDate : 20240101
             System.out.println("날짜가 " + inputDate + "로 설정되었습니다.");
 
         } catch (NumberFormatException e) {
@@ -88,16 +87,22 @@ public class LoginService {
         int currentYear = inputDate / 10000;
         int currentMonth = (inputDate / 100) % 100;
 
-        while(previousYear < currentYear || (previousYear == currentYear && previousMonth <= currentMonth)) {
-            int monthFirstDate = previousYear * 10000 + previousMonth * 100 + 1;
-            List<User> users = UserRepository.getInstance().findAllUsers();
-            CouponService.giveCoupons(monthFirstDate,users);
-            previousMonth++;
-            if(previousMonth > 12){
-                previousYear++;
-                previousMonth = 1;
+        if(currentDate == inputDate){
+            System.out.println();
+        }
+        else{
+            while(previousYear < currentYear || (previousYear == currentYear && previousMonth <= currentMonth)) {
+                int monthFirstDate = previousYear * 10000 + previousMonth * 100 + 1;
+                List<User> users = UserRepository.getInstance().findAllUsers();
+                CouponService.giveCoupons(monthFirstDate,users);
+                previousMonth++;
+                if(previousMonth > 12){
+                    previousYear++;
+                    previousMonth = 1;
+                }
             }
         }
+
 
     }
 
