@@ -83,6 +83,33 @@ public class AddMenuService {
                 new AdminService().start();
             }
         }
+        List<Ingredient> extraIngredients = new ArrayList<>();
+        while(true){
+            System.out.print("고객이 추가/제외할 수 있는 재료를 추가하시겠습니까? (y/n) : ");
+            String answer = sc.nextLine().trim();
+            if(answer.equals("y")){
+                System.out.print("고객이 추가/제외할 수 있는 재료명을 입력해주세요 : ");
+                String extraIngredientName = sc.nextLine().trim();
+                Ingredient extraIngredient = IngredientRepository.getInstance().findByIngredientName(extraIngredientName);
+
+                if(ingredients.containsKey(extraIngredient)){
+                    extraIngredients.add(extraIngredient);
+                }
+                else if(extraIngredient == null){
+                    System.out.println("존재하지 않는 재료입니다.");
+                }
+                else{
+                    System.out.println("레시피에 포함되지 않는 재료입니다.");
+                }
+            }
+            else if(answer.equals("n")){
+                break;
+            }
+            else{
+                System.out.println("y 또는 n만 입력해주세요.");
+            }
+
+        }
 
 
 
@@ -110,7 +137,7 @@ public class AddMenuService {
         System.out.print("입력하신 메뉴를 추가하시겠습니까?(y/n)");
         String input = sc.nextLine().trim();
         if(input.equals("y")){
-            ProductRepository.getInstance().addMenu(menuType, menuName, menuPrice,ingredients);
+            ProductRepository.getInstance().addMenu(menuType, menuName, menuPrice,ingredients,extraIngredients);
             System.out.println("성공적으로 추가되었습니다. 관리자 메뉴로 돌아갑니다.");
             new AdminService().start();
         }

@@ -41,10 +41,8 @@ public class ProductRepository {
                 var productName = data[1];
                 int price = Integer.parseInt(data[2]);
 
-                // 새로운 Product 객체 생성
                 Product product = new Product(productType, productName, price);
 
-                // 재료 정보가 있는 경우 처리
                 if (data.length > 3) {
                     String[] ingredientsData = data[3].split(";");
                     for (String ingredientData : ingredientsData) {
@@ -52,14 +50,21 @@ public class ProductRepository {
                         String ingredientName = ingredientInfo[0];
                         int quantity = Integer.parseInt(ingredientInfo[1]);
 
-                        // IngredientRepository에서 재료를 찾고 Product에 추가
                         Ingredient ingredient = IngredientRepository.getInstance().findByIngredientName(ingredientName);
                         if (ingredient != null) {
                             product.getIngredients().put(ingredient,quantity);
                         }
                     }
                 }
-                // Product 리스트에 추가
+                if (data.length > 4){
+                    String[] extraIngredientData = data[4].split(":");
+                    for (String extraIngredient : extraIngredientData) {
+                        Ingredient extraIngre = IngredientRepository.getInstance().findByIngredientName(extraIngredient);
+                        if (extraIngre != null) {
+                            product.getExtraIngredients().add(extraIngre);
+                        }
+                    }
+                }
                 products.add(product);
             }
             br.close();
@@ -89,9 +94,8 @@ public class ProductRepository {
         }
     }
 
-    public void addMenu(String productType, String productName, int price, Map<Ingredient,Integer> ingredients) {
-        Product product = new Product(productType, productName, price, ingredients);
-
+    public void addMenu(String productType, String productName, int price, Map<Ingredient,Integer> ingredients, List<Ingredient> extraIngredients) {
+        Product product = new Product(productType, productName, price, ingredients, extraIngredients);
         products.add(product);
         saveProductInfos();
     }
@@ -121,6 +125,8 @@ public class ProductRepository {
         }
         return findProduct;
     }
+
+
 
 
 

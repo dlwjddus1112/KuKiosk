@@ -131,23 +131,30 @@ public class PaymentService {
     }
 
     private void reduceIngredient(Product product) {
-        Map<Ingredient, Integer> ingredients = product.getIngredients(); // 각 상품의 재료와 수량
+        Map<Ingredient, Integer> ingredients = product.getIngredients();// 각 상품의 재료와 수량
+        Map<Ingredient, Integer> addedIngredients = product.getAddedIngredients();
         IngredientRepository ingredientRepo = IngredientRepository.getInstance();
 
         for (Map.Entry<Ingredient, Integer> entry : ingredients.entrySet()) {
-            Ingredient ingredient = entry.getKey();
-            int requiredQuantity = entry.getValue();
-
-            // 현재 재고 확인
-            int currentQuantity = ingredientRepo.getIngredientQuantity(ingredient.getIngredientName());
-            if (currentQuantity < requiredQuantity) {
-                System.out.println("재고가 부족합니다.");
-                new MainMenuService().start();
-            }
-
-            // 재료 수량 차감
-            ingredientRepo.addIngredientQuantity(ingredient.getIngredientName(), -requiredQuantity);
+            adjustIngredientQuantity(entry.getKey(), entry.getValue(), ingredientRepo);
         }
+
+        // 추가/삭제된 재료 차감
+        for (Map.Entry<Ingredient, Integer> entry : addedIngredients.entrySet()) {
+            adjustIngredientQuantity(entry.getKey(), entry.getValue(), ingredientRepo);
+        }
+        addedIngredients.clear();
+    }
+    private void adjustIngredientQuantity(Ingredient ingredient, int quantity, IngredientRepository ingredientRepo) {
+        int currentQuantity = ingredientRepo.getIngredientQuantity(ingredient.getIngredientName());
+
+        if (quantity > 0 && currentQuantity < quantity) {
+            System.out.println("재고가 부족합니다: " + ingredient.getIngredientName());
+            new MainMenuService().start();
+        }
+
+        // 재료 차감 (양수는 감소, 음수는 증가)
+        ingredientRepo.addIngredientQuantity(ingredient.getIngredientName(), -quantity);
     }
 
 
