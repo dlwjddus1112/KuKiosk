@@ -15,7 +15,14 @@ public class CouponService {
     public static void giveCoupons(int currentDate, List<User> users) {
         int currentYear = currentDate / 10000;
         int currentMonth = (currentDate / 100) % 100;
+        int endMonth = currentMonth - 1;
+        int endYear = currentYear;
+        if (endMonth <= 0) {
+            endYear -= 1;
+            endMonth += 12;
+        }
 
+        int currentYYYYMM = endYear * 100 + endMonth;
         int startYear = currentYear;
         int startMonth = currentMonth - 3;
 
@@ -25,7 +32,6 @@ public class CouponService {
         }
 
         int startYYYYMM = startYear * 100 + startMonth;
-        int currentYYYYMM = currentYear * 100 + currentMonth;
 
         Map<String, Integer> userTotalAmounts = new HashMap<>();
         List<Order> orders = orderRepository.orders;
