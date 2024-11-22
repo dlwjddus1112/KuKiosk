@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+
+//TODO : 결제할 때 쿠폰 사용할 수 있게 해야함
 public class PaymentService {
     Scanner scanner = new Scanner(System.in);
     public void start(List<Product> selectedProducts){

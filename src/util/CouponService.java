@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 
-//TODO : 발급된 쿠폰 정보 파일로 저장해야함.
 public class CouponService {
     private static final OrderRepository orderRepository = OrderRepository.getInstance();
     public static void giveCoupons(int currentDate, List<User> users) {

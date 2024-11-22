@@ -8,6 +8,8 @@ import java.util.List;
 
 import java.util.Scanner;
 
+
+//TODO : 쿠폰 조회기능 만들어야함.
 public class OrderMainMenuService {
     List<Product> selectedProducts; // 리스트를 필드로 선언
 
@@ -32,6 +34,9 @@ public class OrderMainMenuService {
                 }
                 break;
             case 3:
+                new ShowCouponService(selectedProducts).start();
+                break;
+            case 4:
                 UserSession.getInstance().clearSession();
                 new MainMenuService().start();
                 break;
@@ -51,7 +56,8 @@ public class OrderMainMenuService {
         System.out.println("----------------------");
         System.out.println("1) 상품 선택");
         System.out.println("2) 결제");
-        System.out.println("3) 로그아웃");
+        System.out.println("3) 쿠폰 조회");
+        System.out.println("4) 로그아웃");
         System.out.print("메뉴를 입력하세요 : ");
 
     }

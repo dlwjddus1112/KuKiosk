@@ -33,6 +33,10 @@ public class User {
         return loginId;
     }
 
+    public Map<String, Integer> getCoupons() {
+        return coupons;
+    }
+
     public int getLastCouponIssuedMonth() {
         return lastCouponIssuedMonth;
     }
