@@ -8,6 +8,7 @@ public class User {
     public String name;
     public String loginId;
     public String password;
+    public int totalPayAmount;
     public Map<String,Integer> coupons; // <쿠폰이름, 쿠폰 수>
     public int lastCouponIssuedMonth; // 마지막으로 쿠폰을 받은 날짜
 
@@ -18,13 +19,15 @@ public class User {
         this.password = password;
         this.coupons = new HashMap<String,Integer>();
         this.lastCouponIssuedMonth = 0;
+        this.totalPayAmount = 0;
     }
 
-    public User(int id, String name, String loginId, String password, int lastCouponIssuedMonth) {
+    public User(int id, String name, String loginId, String password, int totalPayAmount, int lastCouponIssuedMonth) {
         this.id = id;
         this.name = name;
         this.loginId = loginId;
         this.password = password;
+        this.totalPayAmount = totalPayAmount;
         this.coupons = new HashMap<String,Integer>();
         this.lastCouponIssuedMonth = lastCouponIssuedMonth;
     }
@@ -65,9 +68,10 @@ public class User {
             }
             couponData.append(entry.getKey()).append(":").append(entry.getValue());
         }
-        return id + "," + name + "," + loginId + "," + password + "," + lastCouponIssuedMonth + "," + couponData;
+        return id + "," + name + "," + loginId + "," + password + "," + totalPayAmount + "," + lastCouponIssuedMonth + "," + couponData;
     }
 
-
-
+    public void setTotalPayAmount(int totalPayAmount) {
+        this.totalPayAmount += totalPayAmount;
+    }
 }

@@ -56,7 +56,8 @@ public class PaymentService {
             }
             selectedProducts.removeAll(productsToRemove);
             System.out.println(totalPrice+"원을 결제하였습니다. 감사합니다");
-
+            currentUser.setTotalPayAmount(totalPrice);
+            userRepository.saveUserInfos();
             String id = currentUser.getLoginId();
             int currentDate = DateManager.getInstance().getCurrentDate();
             OrderRepository.getInstance().addOrder(id, totalPrice, currentDate);
