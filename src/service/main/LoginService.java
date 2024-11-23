@@ -42,7 +42,7 @@ public class LoginService {
             return;
         }
         System.out.println("로그인 성공");
-        UserSession.getInstance().setCurrentUser(user);
+        UserSession.getInstance().setCurrentUser(user); // 로그인한 사용자 정보 저장
         setNowDate();
 
         new OrderMainMenuService(new ArrayList<Product>()).start();
@@ -72,7 +72,7 @@ public class LoginService {
 
             dm.setCurrentDate(inputDate);
             dm.saveDateToFile();
-            checkMonthAndDay(currentDate,inputDate); // currentDate : 20240101, inputDate : 20240101
+            checkMonthAndDay(currentDate,inputDate);// 입력 날짜와 현재 날짜를 비교하여 쿠폰 지급
             System.out.println("날짜가 " + inputDate + "로 설정되었습니다.");
 
         } catch (NumberFormatException e) {
@@ -87,7 +87,7 @@ public class LoginService {
         int currentYear = inputDate / 10000;
         int currentMonth = (inputDate / 100) % 100;
 
-        if(currentDate == inputDate){
+        if(currentDate == inputDate || previousMonth == currentMonth){
             System.out.println();
         }
         else{

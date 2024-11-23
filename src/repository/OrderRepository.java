@@ -73,12 +73,4 @@ public class OrderRepository {
         saveIngredientInfos();
     }
 
-    public Order findByUserId(String userId) {
-        for (Order order : orders) {
-            if(order.getUserId().equals(userId)) {
-                return order;
-            }
-        }
-        return null;
-    }
 }

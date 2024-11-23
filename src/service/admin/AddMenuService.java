@@ -84,34 +84,7 @@ public class AddMenuService {
             }
         }
         List<Ingredient> extraIngredients = new ArrayList<>();
-        while(true){
-            System.out.print("고객이 추가/제외할 수 있는 재료를 추가하시겠습니까? (y/n) : ");
-            String answer = sc.nextLine().trim();
-            if(answer.equals("y")){
-                System.out.print("고객이 추가/제외할 수 있는 재료명을 입력해주세요 : ");
-                String extraIngredientName = sc.nextLine().trim();
-                Ingredient extraIngredient = IngredientRepository.getInstance().findByIngredientName(extraIngredientName);
-
-                if(ingredients.containsKey(extraIngredient)){
-                    extraIngredients.add(extraIngredient);
-                }
-                else if(extraIngredient == null){
-                    System.out.println("존재하지 않는 재료입니다.");
-                }
-                else{
-                    System.out.println("레시피에 포함되지 않는 재료입니다.");
-                }
-            }
-            else if(answer.equals("n")){
-                break;
-            }
-            else{
-                System.out.println("y 또는 n만 입력해주세요.");
-            }
-
-        }
-
-
+        addExtraIngredients(ingredients, extraIngredients);
 
         System.out.print("추가할 메뉴의 가격을 입력하세요(최대 20,000원) : ");
         var menuPriceInput = sc.nextLine().trim();
@@ -153,6 +126,35 @@ public class AddMenuService {
 
     }
 
+    private void addExtraIngredients(Map<Ingredient, Integer> ingredients, List<Ingredient> extraIngredients) {
+        while(true){
+            System.out.print("고객이 추가/제외할 수 있는 재료를 추가하시겠습니까? (y/n) : ");
+            String answer = sc.nextLine().trim();
+            if(answer.equals("y")){
+                System.out.print("고객이 추가/제외할 수 있는 재료명을 입력해주세요 : ");
+                String extraIngredientName = sc.nextLine().trim();
+                Ingredient extraIngredient = IngredientRepository.getInstance().findByIngredientName(extraIngredientName);
+
+                if(ingredients.containsKey(extraIngredient)){
+                    extraIngredients.add(extraIngredient);
+                }
+                else if(extraIngredient == null){
+                    System.out.println("존재하지 않는 재료입니다.");
+                }
+                else{
+                    System.out.println("레시피에 포함되지 않는 재료입니다.");
+                }
+            }
+            else if(answer.equals("n")){
+                break;
+            }
+            else{
+                System.out.println("y 또는 n만 입력해주세요.");
+            }
+
+        }
+    }
+
     private void CheckDuplicateIngredient(String ingredientName, Map<Ingredient, Integer> ingredients) {
         Ingredient findIngredient = IngredientRepository.getInstance().findByIngredientName(ingredientName);
         if(ingredients.containsKey(findIngredient)){
@@ -161,12 +163,9 @@ public class AddMenuService {
         }
     }
 
-
-    //물, 원두, 설탕, 우유, 빵, 시럽, 생크림, 휘핑크림, 초콜릿, 얼음, 버터, 과일, 요거트
     private boolean validIngredientName(String ingredientName) {
         return IngredientRepository.getInstance().findByIngredientName(ingredientName) != null;
     }
-
 
     private boolean validMenuName(String menuName) {
         return menuName.matches("^[a-zA-Z0-9가-힣 ]{1,15}$");
