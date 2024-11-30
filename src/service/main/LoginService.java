@@ -64,6 +64,14 @@ public class LoginService {
 
         try {
             int inputDate = Integer.parseInt(dateInput);
+            int year = inputDate / 10000;
+            int month = (inputDate / 100) % 100;
+            int day = inputDate % 100;
+            if (!isValidDate(year, month, day)) {
+                System.out.println("유효하지 않은 날짜입니다. 다시 입력해주세요.");
+                setNowDate();
+                return;
+            }
             if (currentDate != 0 && inputDate < currentDate) {
                 System.out.println("미래 날짜만 입력할 수 있습니다. 현재 가상 날짜: " + currentDate);
                 setNowDate();
@@ -80,6 +88,35 @@ public class LoginService {
             setNowDate();
         }
     }
+    private boolean isValidDate(int year, int month, int day) {
+        if (month < 1 || month > 12) {
+            return false;
+        }
+        if (day < 1 || day > 31) {
+            return false;
+        }
+
+        // 각 월의 최대 일수
+        int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        // 윤년 계산
+        if (isLeapYear(year)) {
+            daysInMonth[1] = 29; // 2월이 윤년일 경우
+        }
+
+        return day <= daysInMonth[month - 1];
+    }
+
+    private boolean isLeapYear(int year) {
+        if (year % 4 == 0) {
+            if (year % 100 == 0) {
+                return year % 400 == 0;
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     private void checkMonthAndDay(int currentDate, int inputDate) {
         int previousYear = currentDate / 10000;
