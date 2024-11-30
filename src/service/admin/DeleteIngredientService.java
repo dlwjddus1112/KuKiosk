@@ -1,12 +1,15 @@
 package service.admin;
 
 import entity.Ingredient;
+import entity.Product;
 import repository.IngredientRepository;
+import repository.ProductRepository;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 
-//TODO : 재료를 삭제할 때, 어떤 메뉴 레시피에 포함되어있는 재료이면 삭제 못하게 해야함.
 public class DeleteIngredientService {
     private final Scanner sc = new Scanner(System.in);
     public void start() {
@@ -25,8 +28,23 @@ public class DeleteIngredientService {
         System.out.print(ingredientName + "을 삭제하시겠습니까?(y/n)");
         String input = sc.nextLine().trim();
         if(input.equals("y")){
-            IngredientRepository.getInstance().deleteIngredient(ingredientName);
-            System.out.println(ingredientName +"가 삭제되었습니다.");
+            boolean isRecipe = false;
+            List<Product> products = ProductRepository.getInstance().getProducts();
+            for (Product product : products) {
+                Map<Ingredient, Integer> ingredients = product.getIngredients();
+                if (ingredients.containsKey(foundIngredient)) {
+                    isRecipe = true;
+                    break;
+                }
+            }
+            if(!isRecipe){
+                IngredientRepository.getInstance().deleteIngredient(ingredientName);
+                System.out.println(ingredientName +"가 삭제되었습니다.");
+            }
+            else{
+                System.out.println("레시피에 존재하는 재료는 삭제할 수 없습니다.");
+            }
+
             new AdminService().start();
         }
         else if(input.equals("n")){
