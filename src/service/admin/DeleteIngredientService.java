@@ -5,6 +5,8 @@ import repository.IngredientRepository;
 
 import java.util.Scanner;
 
+
+//TODO : 재료를 삭제할 때, 어떤 메뉴 레시피에 포함되어있는 재료이면 삭제 못하게 해야함.
 public class DeleteIngredientService {
     private final Scanner sc = new Scanner(System.in);
     public void start() {

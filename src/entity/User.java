@@ -11,7 +11,7 @@ public class User {
     public int totalPayAmount;
     public Map<String,Integer> coupons; // <쿠폰이름, 쿠폰 수>
     public int lastCouponIssuedMonth; // 마지막으로 쿠폰을 받은 날짜
-
+    public int extraOptionPrice;
     public User(int id, String name, String loginId, String password) {
         this.id = id;
         this.name = name;
@@ -20,6 +20,7 @@ public class User {
         this.coupons = new HashMap<String,Integer>();
         this.lastCouponIssuedMonth = 0;
         this.totalPayAmount = 0;
+        this.extraOptionPrice = 0;
     }
 
     public User(int id, String name, String loginId, String password, int totalPayAmount, int lastCouponIssuedMonth) {
@@ -30,6 +31,7 @@ public class User {
         this.totalPayAmount = totalPayAmount;
         this.coupons = new HashMap<String,Integer>();
         this.lastCouponIssuedMonth = lastCouponIssuedMonth;
+        this.extraOptionPrice = 0;
     }
 
     public String getLoginId() {
@@ -42,6 +44,14 @@ public class User {
 
     public int getLastCouponIssuedMonth() {
         return lastCouponIssuedMonth;
+    }
+
+    public int getExtraOptionPrice() {
+        return extraOptionPrice;
+    }
+
+    public void setExtraOptionPrice(int extraOptionPrice) {
+        this.extraOptionPrice = extraOptionPrice;
     }
 
     public void setLastCouponIssuedMonth(int lastCouponIssuedMonth) {

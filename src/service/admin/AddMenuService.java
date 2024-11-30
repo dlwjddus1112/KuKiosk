@@ -83,7 +83,7 @@ public class AddMenuService {
                 new AdminService().start();
             }
         }
-        List<Ingredient> extraIngredients = new ArrayList<>();
+        Map<Ingredient,Integer> extraIngredients = new HashMap<>();
         addExtraIngredients(ingredients, extraIngredients);
 
         System.out.print("추가할 메뉴의 가격을 입력하세요(최대 20,000원) : ");
@@ -126,7 +126,7 @@ public class AddMenuService {
 
     }
 
-    private void addExtraIngredients(Map<Ingredient, Integer> ingredients, List<Ingredient> extraIngredients) {
+    private void addExtraIngredients(Map<Ingredient, Integer> ingredients, Map<Ingredient,Integer> extraIngredients) {
         while(true){
             System.out.print("고객이 추가/제외할 수 있는 재료를 추가하시겠습니까? (y/n) : ");
             String answer = sc.nextLine().trim();
@@ -136,10 +136,14 @@ public class AddMenuService {
                 Ingredient extraIngredient = IngredientRepository.getInstance().findByIngredientName(extraIngredientName);
 
                 if(ingredients.containsKey(extraIngredient)){
-                    extraIngredients.add(extraIngredient);
+                    if(extraIngredients.containsKey(extraIngredient)){
+                        System.out.println("이미 추가된 재료입니다.");
+                    }
+                    setIngredientPrice(extraIngredients, extraIngredient, extraIngredientName);
                 }
                 else if(extraIngredient == null){
                     System.out.println("존재하지 않는 재료입니다.");
+
                 }
                 else{
                     System.out.println("레시피에 포함되지 않는 재료입니다.");
@@ -152,6 +156,22 @@ public class AddMenuService {
                 System.out.println("y 또는 n만 입력해주세요.");
             }
 
+        }
+    }
+
+    private void setIngredientPrice(Map<Ingredient, Integer> extraIngredients, Ingredient extraIngredient, String extraIngredientName) {
+        System.out.print("추가/제외 재료의 금액을 입력해주세요 : ");
+        var priceInput = sc.nextLine().trim();
+        try {
+            int price = Integer.parseInt(priceInput);
+            if (price <= 0) {
+                System.out.println("가격은 음수가 될 수 없습니다.");
+            } else {
+                extraIngredients.put(extraIngredient, price);
+                System.out.println(extraIngredientName + " 재료가 추가되었습니다.");
+            }
+        }catch (NumberFormatException e) {
+            System.out.println("숫자 형식으로 입력해주세요.");
         }
     }
 

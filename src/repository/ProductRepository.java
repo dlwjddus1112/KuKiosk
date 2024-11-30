@@ -56,12 +56,16 @@ public class ProductRepository {
                         }
                     }
                 }
-                if (data.length > 4){
-                    String[] extraIngredientData = data[4].split(":");
+                if (data.length > 4) {
+                    String[] extraIngredientData = data[4].split(";");
                     for (String extraIngredient : extraIngredientData) {
-                        Ingredient extraIngre = IngredientRepository.getInstance().findByIngredientName(extraIngredient);
-                        if (extraIngre != null) {
-                            product.getExtraIngredients().add(extraIngre);
+                        String[] extraInfo = extraIngredient.split(":");
+                        String ingredientName = extraInfo[0];
+                        int ingredientPrice = Integer.parseInt(extraInfo[1]);
+
+                        Ingredient ingredient = IngredientRepository.getInstance().findByIngredientName(ingredientName);
+                        if (ingredient != null) {
+                            product.getExtraIngredients().put(ingredient, ingredientPrice);
                         }
                     }
                 }
@@ -94,7 +98,7 @@ public class ProductRepository {
         }
     }
 
-    public void addMenu(String productType, String productName, int price, Map<Ingredient,Integer> ingredients, List<Ingredient> extraIngredients) {
+    public void addMenu(String productType, String productName, int price, Map<Ingredient, Integer> ingredients, Map<Ingredient, Integer> extraIngredients) {
         Product product = new Product(productType, productName, price, ingredients, extraIngredients);
         products.add(product);
         saveProductInfos();

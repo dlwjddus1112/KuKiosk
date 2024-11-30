@@ -11,10 +11,10 @@ public class Product {
     private int price;
     private Map<Ingredient, Integer> ingredients;
     private Map<Ingredient, Integer> addedIngredients; // 사용자가 추가/감소한 재료 일시적으로 담는 Map
-    private List<Ingredient> extraIngredients;
+    private Map<Ingredient, Integer> extraIngredients;
 
 
-    public Product(String productType, String productName, int price,Map<Ingredient, Integer> ingredients, List<Ingredient> extraIngredients) {
+    public Product(String productType, String productName, int price,Map<Ingredient, Integer> ingredients, Map<Ingredient,Integer> extraIngredients) {
         this.productType = productType;
         this.productName = productName;
         this.price = price;
@@ -27,7 +27,7 @@ public class Product {
         this.productName = productName;
         this.price = price;
         this.ingredients = ingredients;
-        this.extraIngredients = new ArrayList<Ingredient>();
+        this.extraIngredients = new HashMap<>();
         this.addedIngredients = new HashMap<>();
     }
 
@@ -36,7 +36,7 @@ public class Product {
         this.productName = productName;
         this.price = price;
         this.ingredients = new HashMap<Ingredient, Integer>();
-        this.extraIngredients = new ArrayList<>();
+        this.extraIngredients = new HashMap<>();
         this.addedIngredients = new HashMap<>();
     }
     public void addIngredient(Ingredient ingredient, int quantity) {
@@ -47,7 +47,7 @@ public class Product {
         return addedIngredients;
     }
 
-    public List<Ingredient> getExtraIngredients() {
+    public Map<Ingredient, Integer> getExtraIngredients() {
         return extraIngredients;
     }
 
@@ -55,23 +55,22 @@ public class Product {
         return ingredients;
     }
 
-    public String convertProductRow(){
+    public String convertProductRow() {
         StringBuilder str = new StringBuilder(productType + "," + productName + "," + price + ",");
-        for(Map.Entry<Ingredient, Integer> entry : ingredients.entrySet()){
+        for (Map.Entry<Ingredient, Integer> entry : ingredients.entrySet()) {
             str.append(entry.getKey().getIngredientName()).append(":").append(entry.getValue()).append(";");
         }
         str.append(",");
-        for(int i = 0 ; i < extraIngredients.size() ; i++){
-            if(i == extraIngredients.size() - 1){
-                str.append(extraIngredients.get(i).getIngredientName());
+        int count = 0;
+        for (Map.Entry<Ingredient, Integer> entry : extraIngredients.entrySet()) {
+            if (count > 0) {
+                str.append(";");
             }
-            else{
-                str.append(extraIngredients.get(i).getIngredientName()).append(":");
-            }
+            str.append(entry.getKey().getIngredientName()).append(":").append(entry.getValue());
+            count++;
         }
         return str.toString();
     }
-
 
     public String getProductType() {
         return productType;

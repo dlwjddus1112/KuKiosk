@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Scanner;
 
 
-//TODO : 쿠폰 조회기능 만들어야함.
 public class OrderMainMenuService {
     List<Product> selectedProducts; // 리스트를 필드로 선언
 

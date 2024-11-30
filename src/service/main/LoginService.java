@@ -11,7 +11,7 @@ import util.DateManager;
 import util.UserSession;
 
 import java.util.ArrayList;
-
+//TODO : 날짜 형식에 맞게 입력하게 해야됨. 59일 이런거 안되게
 public class LoginService {
     private final Scanner scanner = new Scanner(System.in);
     private final String adminID = "admin";

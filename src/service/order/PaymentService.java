@@ -25,7 +25,9 @@ public class PaymentService {
             System.out.println((i + 1) + ". " + product.getProductName()+"("+product.getPrice()+"원)");
             totalPrice += product.getPrice();
         }
-        System.out.println("현재 장바구니 총액 : " + totalPrice);
+        System.out.println("추가/제외 옵션 가격 : " + currentUser.getExtraOptionPrice());
+        totalPrice += currentUser.getExtraOptionPrice();
+        System.out.println("현재 장바구니 총액(옵션 포함 가격) : " + totalPrice);
 
         int discountPrice = 0;
         Map<String, Integer> coupons = currentUser.getCoupons();
@@ -57,6 +59,7 @@ public class PaymentService {
             selectedProducts.removeAll(productsToRemove);
             System.out.println(totalPrice+"원을 결제하였습니다. 감사합니다");
             currentUser.setTotalPayAmount(totalPrice);
+            currentUser.setExtraOptionPrice(0);
             userRepository.saveUserInfos();
             String id = currentUser.getLoginId();
             int currentDate = DateManager.getInstance().getCurrentDate();

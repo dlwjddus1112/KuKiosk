@@ -2,10 +2,12 @@ package service.order;
 
 import entity.Ingredient;
 import entity.Product;
+import entity.User;
 import repository.IngredientRepository;
 import repository.ProductRepository;
 import service.admin.AdminService;
 import service.main.MainMenuService;
+import util.UserSession;
 
 import java.util.*;
 
@@ -13,6 +15,7 @@ public class CoffeeSelectService {
     Scanner scanner = new Scanner(System.in);
 
     public void start(List<Product> selectedProducts){
+        User currentUser = UserSession.getInstance().getCurrentUser();
         if(ProductRepository.getInstance().getProducts().isEmpty()){
             System.out.println("아무런 메뉴도 존재하지 않습니다. 메뉴가 등록되면 상품을 선택해주세요.");
             new MainMenuService().start();
@@ -40,7 +43,8 @@ public class CoffeeSelectService {
                 Product selectedCoffee = coffees.get(menu - 1);
                 if(menu <= coffees.size()){
                     if (!isSoldOut(selectedCoffee)) { // 재고가 있는 경우
-                        addExtraOptions(selectedCoffee);
+                        int optionPrice = addExtraOptions(selectedCoffee);
+                        currentUser.setExtraOptionPrice(optionPrice);
                         selectedProducts.add(selectedCoffee);
                         System.out.println(selectedCoffee.getProductName() + "가 추가되었습니다.");
                     } else {
@@ -52,15 +56,18 @@ public class CoffeeSelectService {
         }
     }
 
-    private void addExtraOptions(Product selectedCoffee) {
-        List<Ingredient> extraIngredients = selectedCoffee.getExtraIngredients();
+    private int addExtraOptions(Product selectedCoffee) {
+        Map<Ingredient, Integer> extraIngredients = selectedCoffee.getExtraIngredients();
+        int extraOptionPrice = 0;
         if(extraIngredients.isEmpty()){
             System.out.println("추가할 수 있는 재료가 없습니다.");
         }
         else{
             System.out.println("---- 추가 옵션 ----");
-            for (int i = 0; i < extraIngredients.size(); i++) {
-                System.out.println((i+1) + ". " + extraIngredients.get(i).getIngredientName());
+            int k = 1;
+            for (Ingredient extraIngredient : extraIngredients.keySet()) {
+                System.out.println(k + ". " + extraIngredient.getIngredientName() + "(" + extraIngredients.get(extraIngredient) + "원)");
+                k++;
             }
 
             while(true){
@@ -73,7 +80,7 @@ public class CoffeeSelectService {
                     if(foundIngredient == null){
                         System.out.println("존재하지 않는 재료입니다.");
                     }
-                    else if(extraIngredients.contains(foundIngredient)){
+                    else if(extraIngredients.containsKey(foundIngredient)){
                         System.out.print(extraIngredientName+"을 추가하시려면 y, 감소하시려면 n을 입력해주세요(토핑을 원치 않으시면 그 외의 입력을 입력해주세요) : ");
                         String answer = scanner.nextLine().trim();
 
@@ -83,11 +90,17 @@ public class CoffeeSelectService {
                             var quantityInput = scanner.nextLine().trim();
                             try{
                                 int quantityInt = Integer.parseInt(quantityInput);
+                                if (quantityInt <= 0) {
+                                    System.out.println("수량은 1 이상이어야 합니다.");
+                                    continue;
+                                }
                             } catch (NumberFormatException e) {
                                 System.out.println("숫자 형식으로 입력해주세요. ");
-                                return;
+                                continue;
                             }
                             int quantity = Integer.parseInt(quantityInput);
+                            int ingredientPrice = extraIngredients.get(foundIngredient) * quantity;
+                            extraOptionPrice += ingredientPrice;
                             Map<Ingredient, Integer> addedIngredients = selectedCoffee.getAddedIngredients();
                             addedIngredients.put(foundIngredient, quantity);
                             System.out.println(extraIngredientName + " " + quantity + "개 추가되었습니다.");
@@ -97,17 +110,33 @@ public class CoffeeSelectService {
                             var quantityInput = scanner.nextLine().trim();
                             try{
                                 int quantityInt = Integer.parseInt(quantityInput);
+                                if (quantityInt <= 0) {
+                                    System.out.println("수량은 1 이상이어야 합니다.");
+                                    continue;
+                                }
                             } catch (NumberFormatException e) {
                                 System.out.println("숫자 형식으로 입력해주세요. ");
-                                return;
+                                continue;
                             }
+                            Map<Ingredient, Integer> recipe = selectedCoffee.getIngredients();
                             int quantity = Integer.parseInt(quantityInput);
-                            Map<Ingredient, Integer> addedIngredients = selectedCoffee.getAddedIngredients();
-                            addedIngredients.put(foundIngredient, -quantity);
-                            System.out.println(extraIngredientName + " " + quantity + "개 감소되었습니다.");
+                            if(recipe.containsKey(foundIngredient)){
+                                if(recipe.get(foundIngredient) - quantity < 0 ){
+                                    System.out.println(selectedCoffee.getProductName()+ "은 기본적으로 "
+                                            + foundIngredient.getIngredientName() + "이 "
+                                            + recipe.get(foundIngredient)
+                                            + "개 들어갑니다. 음수가 될 수 없습니다.");
+                                }
+                                else{
+                                    Map<Ingredient, Integer> addedIngredients = selectedCoffee.getAddedIngredients();
+                                    addedIngredients.put(foundIngredient, -quantity);
+                                    System.out.println(extraIngredientName + " " + quantity + "개 감소되었습니다.");
+                                }
+                            }
+
                         }
                         else{
-                            System.out.println("토핑추가가 취소되었습니다.");
+                            System.out.println("y 또는 n만 입력해주세요.");
                         }
                     }
                     else{
@@ -127,7 +156,7 @@ public class CoffeeSelectService {
 
 
         }
-
+        return extraOptionPrice;
 
     }
 
