@@ -21,6 +21,10 @@ public class AddIngredientService {
             new AdminService().start();
         }
         int ingredientQuantity = Integer.parseInt(ingredientQuantityInput);
+        if( ingredientQuantity < 1 ){
+            System.out.println("재료의 최대 수량은 1 이상이어야 합니다.");
+            new AdminService().start();
+        }
         System.out.print("입력하신 재료를 추가하시겠습니까? (y/n)");
         String answer = sc.nextLine().trim();
         if(answer.equals("y")){
