@@ -36,11 +36,12 @@ public class OrderMainMenuService {
                 new ShowCouponService().start(selectedProducts);
                 break;
             case 4:
+                System.out.println("로그아웃 되었습니다.");
                 UserSession.getInstance().clearSession();
                 new MainMenuService().start();
                 break;
             default:
-                System.out.println("1~3 사이의 값만 입력해주세요");
+                System.out.println("1~4 사이의 값만 입력해주세요");
                 this.start();
                 break;
         }
