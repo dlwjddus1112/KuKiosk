@@ -95,7 +95,7 @@ public class CoffeeSelectService {
                                     continue;
                                 }
                                 if (foundIngredient.getCurrentQuantity() - quantityInt < 0){
-                                    System.out.println("재료의 개수는 음수가 될 수 없습니다.");
+                                    System.out.println("주문하신 양은 지금 재료의 수량을 넘어 불가능합니다.");
                                     continue;
                                 }
                             } catch (NumberFormatException e) {
