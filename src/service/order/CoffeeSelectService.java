@@ -94,6 +94,10 @@ public class CoffeeSelectService {
                                     System.out.println("수량은 1 이상이어야 합니다.");
                                     continue;
                                 }
+                                if (foundIngredient.getCurrentQuantity() - quantityInt < 0){
+                                    System.out.println("재료의 개수는 음수가 될 수 없습니다.");
+                                    continue;
+                                }
                             } catch (NumberFormatException e) {
                                 System.out.println("숫자 형식으로 입력해주세요. ");
                                 continue;
