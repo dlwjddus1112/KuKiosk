@@ -29,7 +29,7 @@ public class AdminService {
                 new MainMenuService().start();
                 break;
             default:
-                System.out.println("1~4 사이의 값만 입력해주세요.");
+                System.out.println("1~6 사이의 값만 입력해주세요.");
                 this.start();
         }
     }
