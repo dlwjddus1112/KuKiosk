@@ -85,11 +85,11 @@ public class PaymentService {
     private int getDiscountPrice(List<Product> selectedProducts, int discountPrice, int totalPrice, User currentUser, UserRepository userRepository) {
         Map<String, Integer> coupons = currentUser.getCoupons();
         while(true){
-            System.out.print("쿠폰을 사용하시겠습니까? (y/n) ");
             if(discountPrice >= totalPrice){
                 System.out.println("쿠폰 금액이 상품 금액보다 큽니다. 더 이상 쿠폰을 사용할 수 없습니다.");
                 break;
             }
+            System.out.print("쿠폰을 사용하시겠습니까? (y/n) ");
             String couponInput = scanner.nextLine().trim();
             if(couponInput.equals("y")){
                 new ShowCouponService().showCurrentCoupons(currentUser);
