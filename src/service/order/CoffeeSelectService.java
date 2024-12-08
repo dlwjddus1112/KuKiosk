@@ -58,6 +58,8 @@ public class CoffeeSelectService {
 
     private int addExtraOptions(Product selectedCoffee) {
         Map<Ingredient, Integer> extraIngredients = selectedCoffee.getExtraIngredients();
+        Map<Ingredient, Integer> tempExtraIngredients = extraIngredients;
+
         int extraOptionPrice = 0;
         if(extraIngredients.isEmpty()){
             System.out.println("추가할 수 있는 재료가 없습니다.");
@@ -71,6 +73,7 @@ public class CoffeeSelectService {
             }
 
             while(true){
+                Map<Ingredient, Integer> addedIngredients = selectedCoffee.getAddedIngredients();
                 System.out.print("재료를 추가/감소 하시겠습니까?(y/n)");
                 String input = scanner.nextLine().trim();
                 if(input.equals("y")){
@@ -94,7 +97,8 @@ public class CoffeeSelectService {
                                     System.out.println("수량은 1 이상이어야 합니다.");
                                     continue;
                                 }
-                                if (foundIngredient.getCurrentQuantity() - quantityInt < 0){
+                                if (foundIngredient.getCurrentQuantity() - quantityInt < 0 ||
+                                tempExtraIngredients.get(foundIngredient) < 0) {
                                     System.out.println("주문하신 양은 지금 재료의 수량을 넘어 불가능합니다.");
                                     continue;
                                 }
@@ -105,9 +109,9 @@ public class CoffeeSelectService {
                             int quantity = Integer.parseInt(quantityInput);
                             int ingredientPrice = extraIngredients.get(foundIngredient) * quantity;
                             extraOptionPrice += ingredientPrice;
-                            Map<Ingredient, Integer> addedIngredients = selectedCoffee.getAddedIngredients();
                             addedIngredients.put(foundIngredient, quantity);
                             System.out.println(extraIngredientName + " " + quantity + "개 추가되었습니다.");
+                            tempExtraIngredients.put(foundIngredient, -quantity);
                         }
                         else if(answer.equals("n")){
                             System.out.print("수량을 입력해주세요 : ");
@@ -132,7 +136,6 @@ public class CoffeeSelectService {
                                             + "개 들어갑니다. 음수가 될 수 없습니다.");
                                 }
                                 else{
-                                    Map<Ingredient, Integer> addedIngredients = selectedCoffee.getAddedIngredients();
                                     addedIngredients.put(foundIngredient, -quantity);
                                     System.out.println(extraIngredientName + " " + quantity + "개 감소되었습니다.");
                                 }
