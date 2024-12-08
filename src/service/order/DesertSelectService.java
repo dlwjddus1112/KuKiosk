@@ -10,7 +10,7 @@ import java.util.*;
 
 public class DesertSelectService {
     Scanner scanner = new Scanner(System.in);
-
+    private Map<Ingredient, Integer> totalAddedIngredients = new HashMap<>();
     public void start(List<Product> selectedProducts){
         if(ProductRepository.getInstance().getProducts().isEmpty()){
             System.out.println("아무런 메뉴도 존재하지 않습니다. 메뉴가 등록되면 상품을 선택해주세요.");
@@ -107,7 +107,6 @@ public class DesertSelectService {
     }
     private int addExtraOptions(Product selectedCoffee) {
         Map<Ingredient, Integer> extraIngredients = selectedCoffee.getExtraIngredients();
-        Map<Ingredient, Integer> tempAddedIngredients = new HashMap<>(); // 일시적으로 사용자가 추가한 재료를 저장할 자료구조
 
         int extraOptionPrice = 0;
         if (extraIngredients.isEmpty()) {
@@ -147,14 +146,14 @@ public class DesertSelectService {
                                 // 기본 레시피 수량 + 추가된 수량 합산 후 재고 초과 여부 확인
                                 int currentQuantity = foundIngredient.getCurrentQuantity();
                                 int recipeQuantity = selectedCoffee.getIngredients().getOrDefault(foundIngredient, 0);
-                                int previouslyAddedQuantity = tempAddedIngredients.getOrDefault(foundIngredient, 0);
+                                int previouslyAddedQuantity = totalAddedIngredients.getOrDefault(foundIngredient, 0);
                                 if (currentQuantity - (recipeQuantity + previouslyAddedQuantity + quantityInt) < 0) {
                                     System.out.println("주문하신 양은 지금 재료의 수량을 넘어 불가능합니다.");
                                     continue;
                                 }
 
                                 // 추가 수량 업데이트 및 가격 계산
-                                tempAddedIngredients.put(foundIngredient, previouslyAddedQuantity + quantityInt);
+                                totalAddedIngredients.put(foundIngredient, previouslyAddedQuantity + quantityInt);
                                 int ingredientPrice = extraIngredients.get(foundIngredient) * quantityInt;
                                 extraOptionPrice += ingredientPrice;
                                 addedIngredients.put(foundIngredient, addedIngredients.getOrDefault(foundIngredient, 0) + quantityInt);
@@ -172,14 +171,14 @@ public class DesertSelectService {
                                     System.out.println("수량은 1 이상이어야 합니다.");
                                     continue;
                                 }
-                                int previouslyAddedQuantity = tempAddedIngredients.getOrDefault(foundIngredient, 0);
+                                int previouslyAddedQuantity = totalAddedIngredients.getOrDefault(foundIngredient, 0);
                                 if (previouslyAddedQuantity - quantityInt < 0) {
                                     System.out.println("현재 추가된 수량보다 감소량이 많습니다. 현재 추가된 수량: " + previouslyAddedQuantity);
                                     continue;
                                 }
 
                                 // 추가된 수량 감소 및 가격 계산
-                                tempAddedIngredients.put(foundIngredient, previouslyAddedQuantity - quantityInt);
+                                totalAddedIngredients.put(foundIngredient, previouslyAddedQuantity - quantityInt);
                                 int ingredientPrice = extraIngredients.get(foundIngredient) * quantityInt;
                                 extraOptionPrice -= ingredientPrice;
                                 addedIngredients.put(foundIngredient, addedIngredients.getOrDefault(foundIngredient, 0) - quantityInt);
